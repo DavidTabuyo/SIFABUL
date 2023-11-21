@@ -12,7 +12,7 @@ class InicioSesion(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi('app.ui', self)
+        uic.loadUi('ui/inicio_sesion.ui', self)
         self.boton1.clicked.connect(self.button1_clicked)
         self.BotonOk.clicked.connect(self.BotonOk_clicked)
         self.nueva_ventana = None
