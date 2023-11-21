@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QWidget
 from PyQt5 import uic
 esCorrecto=1 #0:no/1:si
 esBecario=0 #0:no/1:si
@@ -16,6 +16,9 @@ class InicioSesion(QMainWindow):
         uic.loadUi('app.ui', self)
         self.boton1.clicked.connect(self.button1_clicked)
         self.BotonOk.clicked.connect(self.BotonOk_clicked)
+        self.nueva_ventana = None
+
+
 
 
 
@@ -35,12 +38,14 @@ class InicioSesion(QMainWindow):
                 self.close()
                 nueva_ventana = interfazBecario()
                 nueva_ventana.show()
+                uic
             else:
                 #mostramos la interfaz de responsable y ocultamos etsa
-                #self.close()
-                nueva_ventana = interfazResponsable()
-                nueva_ventana.show()
-                sys.exit(app.exec_())
+                self.close()
+                print("kk")
+                self.nueva_ventana = interfazResponsable()
+                self.nueva_ventana.show()
+
 
 
         else:
@@ -55,7 +60,7 @@ class InicioSesion(QMainWindow):
 
 #interfaz de responsable
 
-class interfazResponsable(QMainWindow):
+class interfazResponsable(QWidget):
     def __init__(self):
         super().__init__()
         uic.loadUi('interfazResponsable.ui', self)
@@ -64,7 +69,7 @@ class interfazResponsable(QMainWindow):
 
 #interfaz de becario
 
-class interfazBecario(QMainWindow):
+class interfazBecario(QWidget):
     def __init__(self):
         super().__init__()
         uic.loadUi('interfazBecario.ui', self)
@@ -78,4 +83,6 @@ if __name__ == "__main__":
     demo = InicioSesion()
     demo.show()
     sys.exit(app.exec_())
+
+    
 
