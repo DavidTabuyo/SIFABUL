@@ -9,7 +9,7 @@ CREATE TABLE becarios (
     becario_id TEXT,
     responsable_id TEXT NOT NULL,
     PRIMARY KEY (becario_id),
-    FOREIGN KEY (becario_id) REFERENCES users(user_id)
+    FOREIGN KEY (becario_id) REFERENCES users(user_id),
     FOREIGN KEY (responsable_id) REFERENCES responsables(responsable_id)
 );
 
@@ -18,6 +18,29 @@ CREATE TABLE responsables (
     PRIMARY KEY (responsable_id),
     FOREIGN KEY (responsable_id) REFERENCES users(user_id)
 );
+
+
+
+CREATE TABLE notificaciones (
+    notificacion_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    descripcion TEXT NOT NULL,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    responsable_id NOT NULL,
+    FOREIGN KEY (responsable_id) REFERENCES responsables(responsable_id)
+);
+
+CREATE TABLE becarios_notificaciones (
+    becario_id TEXT,
+    notificacion_id INTEGER,
+    vista INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (becario_id, notificacion_id),
+    FOREIGN KEY (becario_id) REFERENCES becario(becario_id),
+    FOREIGN KEY (notificacion_id) REFERENCES notificacion(notificacion_id)
+);
+
+
+
 
 
 
@@ -40,3 +63,14 @@ INSERT INTO becarios (becario_id, responsable_id) VALUES
     ('dmartm14', 'emcuef'),
     ('dtabum00', 'emcuef');
 
+
+
+INSERT INTO notificaciones (titulo, descripcion, responsable_id) VALUES
+    ('Aula 101', 'Necesito que reinicieis todos los equipos', 'emcuef'),
+    ('Limpiar', 'Limpiad porfavor el teclado y el ratos del aula 217', 'emcuef'),
+    ('Instalar AutoCAD', 'Necesito intaleis autocad en todos los equipos de la 103 para mañana', 'emcuef');
+
+INSERT INTO becarios_notificaciones (notificacion_id, becario_id) VALUES
+    (1, 'dmartm14'), (1, 'dtabum00'),
+    (2, 'vtunog00'), (2, 'ogingd00'),
+    (3, 'dmartm14'), (3, 'dtabum00'), (3, 'vtunog00'), (3, 'ogingd00');
