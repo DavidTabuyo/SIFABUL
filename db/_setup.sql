@@ -25,9 +25,7 @@ CREATE TABLE notificaciones (
     notificacion_id INTEGER PRIMARY KEY AUTOINCREMENT,
     titulo TEXT NOT NULL,
     descripcion TEXT NOT NULL,
-    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    responsable_id NOT NULL,
-    FOREIGN KEY (responsable_id) REFERENCES responsables(responsable_id)
+    fecha_hora DATETIME NOT NULL
 );
 
 CREATE TABLE becarios_notificaciones (
@@ -39,6 +37,15 @@ CREATE TABLE becarios_notificaciones (
     FOREIGN KEY (notificacion_id) REFERENCES notificacion(notificacion_id)
 );
 
+
+
+CREATE TABLE fichajes (
+    fichaje_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    becario_id TEXT,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    FOREIGN KEY (becario_id) REFERENCES becario(becario_id)
+);
 
 
 
@@ -65,12 +72,20 @@ INSERT INTO becarios (becario_id, responsable_id) VALUES
 
 
 
-INSERT INTO notificaciones (titulo, descripcion, responsable_id) VALUES
-    ('Aula 101', 'Necesito que reinicieis todos los equipos', 'emcuef'),
-    ('Limpiar', 'Limpiad porfavor el teclado y el ratos del aula 217', 'emcuef'),
-    ('Instalar AutoCAD', 'Necesito intaleis autocad en todos los equipos de la 103 para mañana', 'emcuef');
+INSERT INTO notificaciones (titulo, descripcion, fecha_hora) VALUES
+    ('Aula 101', 'Necesito que reinicieis todos los equipos', '2023-11-24 14:31:54'),
+    ('Limpiar', 'Limpiad porfavor el teclado y el ratos del aula 217', '2023-11-24 10:03:18'),
+    ('Instalar AutoCAD', 'Necesito intaleis autocad en todos los equipos de la 103 para mañana', '2023-11-24 19:15:45');
 
 INSERT INTO becarios_notificaciones (notificacion_id, becario_id) VALUES
     (1, 'dmartm14'), (1, 'dtabum00'),
     (2, 'vtunog00'), (2, 'ogingd00'),
     (3, 'dmartm14'), (3, 'dtabum00'), (3, 'vtunog00'), (3, 'ogingd00');
+
+
+
+INSERT INTO fichajes (becario_id, fecha, hora) VALUES
+    ('dtabum00', '2023-11-25', '12:34:56'),
+    ('vtunog00', '2023-11-25', '12:35:01'),
+    ('vtunog00', '2023-11-26', '12:33:45'),
+    ('dtabum00', '2023-11-26', '12:29:34');
