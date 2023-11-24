@@ -8,15 +8,14 @@ except:
     pass
 
 
-connection = sqlite3.connect('db/db.sqlite')
-cursor = connection.cursor()
+with sqlite3.connect('db/db.sqlite') as connection:
+    cursor = connection.cursor()
 
 
-with open('db/_setup.sql', 'r') as file:
-    sql_script = file.read()
+    with open('db/_setup.sql', 'r') as file:
+        sql_script = file.read()
 
-cursor.executescript(sql_script)
+    cursor.executescript(sql_script)
 
 
-connection.commit()
-connection.close()
+    connection.commit()
