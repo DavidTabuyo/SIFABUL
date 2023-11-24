@@ -1,9 +1,11 @@
 import sqlite3
+import bcrypt
 
 
 class __Controlador:
     def __init__(self, user_id: str):
-        self.__user_id = user_id
+        self._user_id = user_id
+        pass
 
 
 
@@ -35,7 +37,7 @@ class __ControladorResponsable(__Controlador):
                 JOIN becarios_notificaciones ON becarios_notificaciones.notificacion_id = notificaciones.notificacion_id
                 JOIN becarios ON becarios.becario_id = becarios_notificaciones.becario_id
                 WHERE becarios.responsable_id = ?
-            ''', (self.__user_id,))
+            ''', (self._user_id,))
             return cursor.fetchall()
     
     def add_user(self, new_user_email: str, new_user_password: str) -> bool:
@@ -50,12 +52,35 @@ class __ControladorResponsable(__Controlador):
         Añade notificaciones a los becarios pasados en la lista
         '''
         
-        
+
         
 def login(user_id: str, password: str) -> __Controlador:
-    if user_id == 'emcuef' and password == 'hola':
-        return __ControladorResponsable(user_id)
-    
+    salt = bcrypt.gensalt()
+    with sqlite3.connect('db/db.sqlite') as connection:
+        cursor = connection.cursor()
+        cursor.execute('''
+            SELECT salt, hash FROM users WHERE user_id = ?
+        ''', (user_id,))
+
+        # Comprueba si el usuario existe
+        try:
+            (salt, hash) = cursor.fetchone()
+        except TypeError:
+            raise LookupError('Usuario no encontrado')
+        
+        # Comprueba la contraseña
+        if hash != bcrypt.hashpw(password.encode('utf-8'), salt):
+            raise ValueError('Contraseña incorrecta')
+        
+        # Comprueba si es becario
+        cursor.execute('''
+            SELECT * FROM becarios WHERE becario_id = ?
+        ''', (user_id,))
+        if cursor.fetchone() != None:
+            return __ControladorBecario(user_id)
+        else:
+            return __ControladorResponsable(user_id)
+        
     
 
 
