@@ -43,6 +43,7 @@ CREATE TABLE fichajes (
     becario_id TEXT,
     fecha DATE,
     hora TIME,
+    is_entrada INTEGER,
     PRIMARY KEY (becario_id, fecha, hora),
     FOREIGN KEY (becario_id) REFERENCES becarios(becario_id)
 );
@@ -50,7 +51,7 @@ CREATE TABLE fichajes (
 CREATE TABLE semanas (
     becario_id TEXT,
     lunes DATE,
-    total_semana REAL,
+    total_semana INTEGER,
     PRIMARY KEY (becario_id, lunes),
     FOREIGN KEY (becario_id) REFERENCES becarios(becario_id)
 );
@@ -92,8 +93,8 @@ INSERT INTO becarios_notificaciones (notificacion_id, becario_id) VALUES
 
 
 
-INSERT INTO fichajes (becario_id, fecha, hora) VALUES
-    ('dtabum00', '2023-11-25', '12:34:56'),
-    ('vtunog00', '2023-11-25', '12:35:01'),
-    ('vtunog00', '2023-11-26', '12:33:45'),
-    ('dtabum00', '2023-11-26', '12:29:34');
+INSERT INTO fichajes (becario_id, fecha, hora, is_entrada) VALUES
+    ('dtabum00', '2023-11-25', '12:29:34', 1),
+    ('dtabum00', '2023-11-25', '12:34:56', 0),
+    ('vtunog00', '2023-11-26', '12:35:01', 1),
+    ('vtunog00', '2023-11-26', '12:33:45', 1);
