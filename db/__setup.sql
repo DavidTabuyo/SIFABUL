@@ -5,18 +5,18 @@
 --     hash BLOB NOT NULL
 -- );
 
+CREATE TABLE responsables (
+    responsable_id TEXT,
+    PRIMARY KEY (responsable_id),
+    FOREIGN KEY (responsable_id) REFERENCES users(user_id)
+);
+
 CREATE TABLE becarios (
     becario_id TEXT,
     responsable_id TEXT NOT NULL,
     PRIMARY KEY (becario_id),
     FOREIGN KEY (becario_id) REFERENCES users(user_id),
     FOREIGN KEY (responsable_id) REFERENCES responsables(responsable_id)
-);
-
-CREATE TABLE responsables (
-    responsable_id TEXT,
-    PRIMARY KEY (responsable_id),
-    FOREIGN KEY (responsable_id) REFERENCES users(user_id)
 );
 
 
@@ -33,18 +33,18 @@ CREATE TABLE becarios_notificaciones (
     notificacion_id INTEGER,
     vista INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (becario_id, notificacion_id),
-    FOREIGN KEY (becario_id) REFERENCES becario(becario_id),
-    FOREIGN KEY (notificacion_id) REFERENCES notificacion(notificacion_id)
+    FOREIGN KEY (becario_id) REFERENCES becarios(becario_id),
+    FOREIGN KEY (notificacion_id) REFERENCES notificaciones(notificacion_id)
 );
 
 
 
 CREATE TABLE fichajes (
     fichaje_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    becario_id TEXT,
+    becario_id TEXT NOT NULL,
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
-    FOREIGN KEY (becario_id) REFERENCES becario(becario_id)
+    FOREIGN KEY (becario_id) REFERENCES becarios(becario_id)
 );
 
 
