@@ -5,7 +5,13 @@ import bcrypt
 class __Controlador:
     def __init__(self, user_id: str):
         self._user_id = user_id
-        pass
+        
+    def get_resumen_semanas(self, becario_id: str) -> list[int]:
+        '''
+        Devuelve una lista con las horas que el becario ha estado fichado en cada semana
+        en n semanas
+        '''
+        ...
 
 
 
@@ -16,6 +22,14 @@ class __ControladorBecario(__Controlador):
         '''
         ...
         
+    def get_notificaciones(self) -> list[tuple[str, str, bool]]:
+        '''
+        Devuelve una lista con notificaciones(titulo, descripcion, vista)
+        '''
+        ...
+        
+    def get_resumen_semanas(self) -> list[int]:
+        return super().get_resumen_semanas(self._user_id)
         
         
 class __ControladorResponsable(__Controlador):

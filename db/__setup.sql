@@ -40,10 +40,18 @@ CREATE TABLE becarios_notificaciones (
 
 
 CREATE TABLE fichajes (
-    fichaje_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    becario_id TEXT NOT NULL,
-    fecha DATE NOT NULL,
-    hora TIME NOT NULL,
+    becario_id TEXT,
+    fecha DATE,
+    hora TIME,
+    PRIMARY KEY (becario_id, fecha, hora),
+    FOREIGN KEY (becario_id) REFERENCES becarios(becario_id)
+);
+
+CREATE TABLE semanas (
+    becario_id TEXT,
+    lunes DATE,
+    total_semana REAL,
+    PRIMARY KEY (becario_id, lunes),
     FOREIGN KEY (becario_id) REFERENCES becarios(becario_id)
 );
 
