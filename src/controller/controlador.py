@@ -2,6 +2,12 @@ import sqlite3
 import bcrypt
 import requests
 import arrow
+from model.user import User
+from model.becario import Becario
+from model.responsable import Responsable
+from model.fichaje import Fichaje
+from model.notificacion import Notificacion
+from model.semana import Semana
 
 
 class __Controlador:
@@ -27,7 +33,7 @@ class __Controlador:
 
 
 class __ControladorBecario(__Controlador):
-    def get_fichajes_hoy(self) -> list[tuple[str, bool]]:
+    def get_fichajes_hoy(self) -> list[Fichaje]:
         '''
         Devuelve todos los fichajes del dia en forma de [('HH:mm', True), ...]
         '''
@@ -42,14 +48,14 @@ class __ControladorBecario(__Controlador):
                 SELECT hora, is_entrada
                 FROM fichajes
                 WHERE becario_id = ? and fecha = ?
-                ORDER BY hora
+                ORDER BY hora DESC
             ''', (self._user_id, fecha))
             fichajes = cursor.fetchall() or ()
             
             # Formatear el resultado: [('HH:mm', True), ...]
-            return [(hora[:-3], bool(is_entrada)) for (hora, is_entrada) in fichajes]
+            return [Fichaje(hora[:-3], bool(is_entrada)) for (hora, is_entrada) in fichajes]
         
-    def get_notificaciones(self) -> list[tuple[str, str, str, bool]]:
+    def get_notificaciones(self) -> list[Notificacion]:
         '''
         Devuelve una lista con notificaciones(titulo, descripcion, fecha_hora, is_vista)
         '''
@@ -60,12 +66,12 @@ class __ControladorBecario(__Controlador):
                 FROM notificaciones
                 JOIN becarios_notificaciones ON becarios_notificaciones.notificacion_id = notificaciones.notificacion_id
                 WHERE becario_id = ?
-                ORDER BY fecha_hora
+                ORDER BY fecha_hora DESC
             ''', (self._user_id,))
             notificaiones = cursor.fetchall()
             
             # Cambio de 0, 1 a False, True
-            return [(*rest, bool(is_vista)) for (*rest, is_vista) in notificaiones]
+            return [Notificacion(*rest, bool(is_vista)) for (*rest, is_vista) in notificaiones]
         
     def get_resumen_semanas(self) -> list[int]:
         '''
@@ -129,7 +135,7 @@ class __ControladorBecario(__Controlador):
 
         
 class __ControladorResponsable(__Controlador):
-    def get_becarios(self) -> list[str, str]:
+    def get_becarios(self) -> list[Becario]:
         '''
         Devuelve una lista de sus becarios
         '''
@@ -141,22 +147,28 @@ class __ControladorResponsable(__Controlador):
                 JOIN users ON users.user_id = becarios.becario_id
                 WHERE becarios.responsable_id = ?
             ''', (self._user_id,))
-            return list(cursor.fetchall())
+            return [Becario(*becario) for becario in cursor.fetchall()]
         
-    def get_notificaiones(self) -> list[tuple[str, str]]:
+    def get_notificaiones(self) -> list[Notificacion]:
         '''
         Devuelve una lista de (titulo, descripcion) de todas las notificaciones
         '''
         with sqlite3.connect('db/db.sqlite') as connection:
             cursor = connection.cursor()
             cursor.execute('''
-                SELECT DISTINCT notificaciones.titulo, notificaciones.descripcion
+                SELECT DISTINCT *
                 FROM notificaciones
                 JOIN becarios_notificaciones ON becarios_notificaciones.notificacion_id = notificaciones.notificacion_id
                 JOIN becarios ON becarios.becario_id = becarios_notificaciones.becario_id
                 WHERE becarios.responsable_id = ?
+                ORDER BY notificaciones.fecha_hora DESC
             ''', (self._user_id,))
-            return cursor.fetchall()
+            return [Notificacion(*rest, is_all_vista or self._get_is_all_vista(id)) for (id, *rest, is_all_vista) in cursor.fetchall()]
+    
+    def _get_is_all_vista(self, notificacion_id: str) -> bool:
+        '''
+        Devuelve si una notificacion ha sido vista
+        '''
     
     def add_user(self, new_user_email: str, new_user_password: str) -> bool:
         '''

@@ -1,19 +1,16 @@
-
 from PyQt5.QtWidgets import QMainWindow, QMessageBox, QLineEdit
 from PyQt5 import uic
-from becario import InterfazBecario
-from responsable import InterfazResponsable
-from controlador import *
+from view.becario_view import BecarioView
+from view.responsable_view import ResponsableView
+from controller.controlador import login
 
 
-esCorrecto=1 #0:no/1:si
-esBecario=0 #0:no/1:si
 
-class InicioSesion(QMainWindow):
+class PrincipalView(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/inicio_sesion.ui', self)
+        uic.loadUi('src/view/ui/principal_view.ui', self)
         self.boton1.clicked.connect(self.button1_clicked)
         self.BotonOk.clicked.connect(self.BotonOk_clicked)
         self.nueva_ventana = None

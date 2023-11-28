@@ -1,12 +1,11 @@
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import uic
-from controlador import *
 
 
-class InterfazBecario(QMainWindow):
+class BecarioView(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/becario.ui', self)
+        uic.loadUi('src/view/ui/becario_view.ui', self)
         self.BtnFichar.clicked.connect(self.BtnFichar_clicked)
 
 

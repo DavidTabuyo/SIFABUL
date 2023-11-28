@@ -25,13 +25,14 @@ CREATE TABLE notificaciones (
     notificacion_id INTEGER PRIMARY KEY AUTOINCREMENT,
     titulo TEXT NOT NULL,
     descripcion TEXT NOT NULL,
-    fecha_hora DATETIME NOT NULL
+    fecha_hora DATETIME NOT NULL,
+    is_all_vista INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE becarios_notificaciones (
     becario_id TEXT,
     notificacion_id INTEGER,
-    is_vista INTEGER NOT NULL DEFAULT 0,
+    is_vista DATETIME,
     PRIMARY KEY (becario_id, notificacion_id),
     FOREIGN KEY (becario_id) REFERENCES becarios(becario_id),
     FOREIGN KEY (notificacion_id) REFERENCES notificaciones(notificacion_id)
@@ -73,10 +74,10 @@ INSERT INTO becarios (becario_id, responsable_id) VALUES
 
 
 
-INSERT INTO notificaciones (titulo, descripcion, fecha_hora) VALUES
-    ('Aula 101', 'Necesito que reinicieis todos los equipos', '2023-11-24 14:31:54'),
-    ('Limpiar', 'Limpiad porfavor el teclado y el ratos del aula 217', '2023-11-24 10:03:18'),
-    ('Instalar AutoCAD', 'Necesito intaleis autocad en todos los equipos de la 103 para mañana', '2023-11-24 19:15:45');
+INSERT INTO notificaciones (titulo, descripcion, fecha_hora, is_all_vista) VALUES
+    ('Aula 101', 'Necesito que reinicieis todos los equipos', '2023-11-24 14:31:54', 0),
+    ('Limpiar', 'Limpiad porfavor el teclado y el ratos del aula 217', '2023-11-24 10:03:18', 0),
+    ('Instalar AutoCAD', 'Necesito intaleis autocad en todos los equipos de la 103 para mañana', '2023-11-24 19:15:45', 0);
 
 INSERT INTO becarios_notificaciones (notificacion_id, becario_id) VALUES
     (1, 'dmartm14'), (1, 'dtabum00'), (1, 'ogingd00'),
