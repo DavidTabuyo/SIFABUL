@@ -13,11 +13,66 @@ class __Controlador:
         Devuelve una lista con las horas que el becario ha estado fichado en cada semana
         en n semanas
         '''
-        ...
+        with sqlite3.connect('db/db.sqlite') as connection:
+            cursor = connection.cursor()
+            cursor.execute('''
+                SELECT total_semana
+                FROM semanas
+                WHERE becario_id = ?
+                ORDER BY lunes
+                LIMIT 10
+            ''', (self._user_id,))
+            return [segundos // 3600 for (segundos,) in cursor.fetchall()]
 
 
 
 class __ControladorBecario(__Controlador):
+    def get_fichajes_hoy(self) -> list[tuple[str, bool]]:
+        '''
+        Devuelve todos los fichajes del dia en forma de [('HH:mm', True), ...]
+        '''
+        # Obtener fecha actual real
+        timestamp = arrow.get(requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
+        fecha = timestamp.format('YYYY-MM-DD')
+        
+        # Obtener todos los fichajes de hoy 
+        with sqlite3.connect('db/db.sqlite') as connection:
+            cursor = connection.cursor()
+            cursor.execute('''
+                SELECT hora, is_entrada
+                FROM fichajes
+                WHERE becario_id = ? and fecha = ?
+                ORDER BY hora
+            ''', (self._user_id, fecha))
+            fichajes = cursor.fetchall() or ()
+            
+            # Formatear el resultado: [('HH:mm', True), ...]
+            return [(hora[:-3], bool(is_entrada)) for (hora, is_entrada) in fichajes]
+        
+    def get_notificaciones(self) -> list[tuple[str, str, str, bool]]:
+        '''
+        Devuelve una lista con notificaciones(titulo, descripcion, fecha_hora, is_vista)
+        '''
+        with sqlite3.connect('db/db.sqlite') as connection:
+            cursor = connection.cursor()
+            cursor.execute('''
+                SELECT notificaciones.titulo, notificaciones.descripcion, notificaciones.fecha_hora, becarios_notificaciones.is_vista
+                FROM notificaciones
+                JOIN becarios_notificaciones ON becarios_notificaciones.notificacion_id = notificaciones.notificacion_id
+                WHERE becario_id = ?
+                ORDER BY fecha_hora
+            ''', (self._user_id,))
+            notificaiones = cursor.fetchall()
+            
+            # Cambio de 0, 1 a False, True
+            return [(*rest, bool(is_vista)) for (*rest, is_vista) in notificaiones]
+        
+    def get_resumen_semanas(self) -> list[int]:
+        '''
+        Devuelve una lista con las horas que ha estado fichado en cada semana en n semanas
+        '''
+        return super().get_resumen_semanas(self._user_id)
+ 
     def add_fichaje(self):
         '''
         Añade un fichaje a la hora actual y actualiza la semana
@@ -32,7 +87,9 @@ class __ControladorBecario(__Controlador):
             
             # Obtener el ultimo fichaje
             cursor.execute('''
-                SELECT hora, is_entrada, fecha FROM fichajes WHERE becario_id = ? and fecha = ?
+                SELECT hora, is_entrada
+                FROM fichajes
+                WHERE becario_id = ? and fecha = ?
                 ORDER BY hora DESC
             ''', (self._user_id, fecha))
             last_fichaje = cursor.fetchone()  # ((HH:mm:ss, 0) o None) o (HH:mm:ss, 1)
@@ -69,29 +126,22 @@ class __ControladorBecario(__Controlador):
                 INSERT OR REPLACE INTO semanas (becario_id, lunes, total_semana) VALUES
                     (?, ?, ?);
             ''', (self._user_id, lunes, total_semana + segundos_fichado))
-            
-        
-    def get_fichajes(self) -> list[tuple]:
-        '''
-        Devuelve todos los fichajes del dia
-        '''
-        
-    def get_notificaciones(self) -> list[tuple[str, str, bool]]:
-        '''
-        Devuelve una lista con notificaciones(titulo, descripcion, vista)
-        '''
-        ...
-        
-    def get_resumen_semanas(self) -> list[int]:
-        return super().get_resumen_semanas(self._user_id)
-        
+
         
 class __ControladorResponsable(__Controlador):
-    def get_becario_ids(self) -> list[str]:
+    def get_becarios(self) -> list[str, str]:
         '''
-        Devuelve una lista de ids de sus becarios
+        Devuelve una lista de sus becarios
         '''
-        ...
+        with sqlite3.connect('db/db.sqlite') as connection:
+            cursor = connection.cursor()
+            cursor.execute('''
+                SELECT becarios.becario_id, users.nombre
+                FROM becarios
+                JOIN users ON users.user_id = becarios.becario_id
+                WHERE becarios.responsable_id = ?
+            ''', (self._user_id,))
+            return list(cursor.fetchall())
         
     def get_notificaiones(self) -> list[tuple[str, str]]:
         '''
@@ -155,7 +205,7 @@ def login(user_id: str, password: str) -> __Controlador:
 
 
 if __name__ == '__main__':
-    controlador: __ControladorBecario = login('dmartm14', 'hola')
-    controlador.add_fichaje()
+    controlador: __ControladorResponsable = login('emcuef', 'hola')
+    print(controlador.get_becarios())
     
     
