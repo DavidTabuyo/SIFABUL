@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox, QLineEdit
 from PyQt5 import uic
 from view.becario_view import BecarioView
 from view.responsable_view import ResponsableView
-from controller.controlador import login
+from controller.controlador_principal import login
 
 
 

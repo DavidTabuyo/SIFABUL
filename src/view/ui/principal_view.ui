@@ -46,6 +46,9 @@
          <property name="wordWrap">
           <bool>false</bool>
          </property>
+         <property name="styleSheet">
+          <string>color: #FF69B4;</string>
+         </property>
         </widget>
        </item>
        <item>
@@ -59,12 +62,18 @@
                <property name="text">
                 <string>Usuario</string>
                </property>
+               <property name="styleSheet">
+                <string>color: #FF69B4;</string>
+               </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_2">
                <property name="text">
                 <string>Contraseña</string>
+               </property>
+               <property name="styleSheet">
+                <string>color: #FF69B4;</string>
                </property>
               </widget>
              </item>
@@ -89,12 +98,18 @@
              <property name="text">
               <string>Borrar</string>
              </property>
+             <property name="styleSheet">
+              <string>background-color: #FF69B4; color: white;</string>
+             </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="BotonOk">
              <property name="text">
               <string>Aceptar</string>
+             </property>
+             <property name="styleSheet">
+              <string>background-color: #FF69B4; color: white;</string>
              </property>
             </widget>
            </item>
@@ -114,6 +129,9 @@
        </property>
        <property name="text">
         <string>SISTEMA DE FICHAJES UNIVERSIDAD DE LEÓN</string>
+       </property>
+       <property name="styleSheet">
+        <string>color: #FF69B4;</string>
        </property>
       </widget>
      </item>
