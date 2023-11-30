@@ -1,7 +1,7 @@
-from controller.controlador import Controlador
+from controller.controlador_user import ControladorUser
 from model.becario import Becario
 
-class ControladorBecario(Controlador):
+class ControladorBecario(ControladorUser):
     def __init__(self, becario: Becario) -> None:
         super().__init__(becario)
 

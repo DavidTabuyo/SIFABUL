@@ -16,11 +16,6 @@ class PrincipalView(QMainWindow):
         self.nueva_ventana = None
         self.Password.setEchoMode(QLineEdit.Password)  # Configurar el modo de eco
 
-
-
-
-
-
     #boton borra
     def button1_clicked(self):
         #borra el contenido de los slots

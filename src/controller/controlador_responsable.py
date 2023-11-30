@@ -1,7 +1,7 @@
-from controller.controlador import Controlador
+from controller.controlador_user import ControladorUser
 from model.responsable import Responsable
 
-class ControladorResponsable(Controlador):
+class ControladorResponsable(ControladorUser):
     def __init__(self, responsable: Responsable) -> None:
         super().__init__(responsable)
         

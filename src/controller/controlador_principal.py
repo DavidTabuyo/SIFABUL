@@ -1,62 +1,50 @@
-from controller.controlador import Controlador
 from controller.controlador_becario import ControladorBecario
 from controller.controlador_responsable import ControladorResponsable
+from model.user import User
 from model.becario import Becario
 from model.responsable import Responsable
 
 
-def login(user_id: str, password: str) -> 'Controlador':
-        # Comprueba si es becario
-        if Becario.is_becario(user_id):
-            becario = Becario.from_id(user_id)
+def login(user_id: str, password: str) -> ControladorBecario | ControladorResponsable:
+    """
+    Realiza el proceso de inicio de sesión para un usuario.
 
-            # Comprueba contraseña
-            if not becario.check_password(password):
-                raise ValueError('Contraseña incorrecta')
-            
-            return ControladorBecario(becario)
-            
-            
-        # Comprueba si es responsable
-        if Responsable.is_responsable(user_id):
-            responsable = Responsable.from_id(user_id)
-            
-            # Comprueba contraseña
-            if not responsable.check_password(password):
-                raise ValueError('Contraseña incorrecta')
-            
-            return ControladorResponsable(responsable)
-        
-        
-        # No existe
-        raise LookupError('Usuario no encontrado')
-        
-        
-        
-        
-        
-        # with sqlite3.connect('db/db.sqlite') as connection:
-        #     cursor = connection.cursor()
-        #     cursor.execute('''
-        #         SELECT salt, hash FROM users WHERE user_id = ?
-        #     ''', (user_id,))
+    Args:
+        user_id (str): El ID del usuario que intenta iniciar sesión.
+        password (str): La contraseña proporcionada por el usuario.
 
-        #     # Comprueba si el usuario existe
-        #     try:
-        #         (salt, hash) = cursor.fetchone()
-        #     except TypeError:
-        #         raise LookupError('Usuario no encontrado')
-            
-        #     # Comprueba la contraseña
-        #     if hash != bcrypt.hashpw(password.encode('utf-8'), salt):
-        #         raise ValueError('Contraseña incorrecta')
-            
-        #     # Comprueba si es becario
-        #     cursor.execute('''
-        #         SELECT * FROM becarios WHERE becario_id = ?
-        #     ''', (user_id,))
-        #     if cursor.fetchone() != None:
-        #         return __ControladorBecario(user_id)
-        #     else:
-        #         return __ControladorResponsable(user_id)
-          
+    Returns:
+        ControladorBecario | ControladorResponsable: 
+            - Un ControladorBecario si el usuario es un becario y la contraseña es correcta.
+            - Un ControladorResponsable si el usuario es un responsable y la contraseña es correcta.
+
+    Raises:
+        ValueError: Se lanza si la contraseña proporcionada es incorrecta.
+        LookupError: Se lanza si el usuario no se encuentra en el sistema.
+    """
+    # Comprueba si es becario
+    if User.is_becario(user_id):
+        becario = Becario.from_id(user_id)
+        controlador_becario = ControladorBecario(becario)
+
+        # Comprueba contraseña
+        if not controlador_becario.check_password(password):
+            raise ValueError('Contraseña incorrecta')
+        
+        return controlador_becario
+        
+        
+    # Comprueba si es responsable
+    if User.is_responsable(user_id):
+        responsable = Responsable.from_id(user_id)
+        controlador_responsable = ControladorResponsable(responsable)
+
+        # Comprueba contraseña
+        if not controlador_responsable.check_password(password):
+            raise ValueError('Contraseña incorrecta')
+        
+        return controlador_responsable
+    
+    
+    # No existe
+    raise LookupError('Usuario no encontrado')

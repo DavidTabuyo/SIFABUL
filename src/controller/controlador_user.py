@@ -5,13 +5,13 @@ import arrow
 from model.user import User
 
 
-class Controlador:
+class ControladorUser:
     def __init__(self, user: User) -> None:
         self.user = user
         
-        
-    def change_password(self, user_id, old_password, new_password):
-        ...
+    
+    def check_password(self, password: str) -> bool:
+        return self.user.hash == bcrypt.hashpw(password.encode('utf-8'), self.user.salt)
         
 
 

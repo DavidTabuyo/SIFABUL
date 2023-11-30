@@ -1,3 +1,4 @@
+import sqlite3
 from model.user import User
 
 
@@ -11,10 +12,22 @@ class Becario(User):
         
         
     @staticmethod
-    def from_id(becario_id) -> 'Becario':
-        ...
-        
-        
-    @staticmethod
-    def is_becario(user_id: str) -> bool:
-        ...
+    def from_id(becario_id: str) -> 'Becario':
+        """
+        Crea una instancia de la clase Becario utilizando el ID del becario.
+
+        Args:
+            becario_id (str): ID del becario.
+
+        Returns:
+            Becario: Instancia de la clase Becario.
+        """
+        with sqlite3.connect('db/db.sqlite') as connection:
+            cursor = connection.cursor()
+            cursor.execute('''
+                SELECT users.user_id, users.nombre, users.salt, users.hash, becarios.responsable_id
+                FROM users
+                JOIN becarios ON users.user_id = becarios.becario_id
+                WHERE user_id = ?
+            ''', (becario_id,))
+            return Becario(*cursor.fetchone())
