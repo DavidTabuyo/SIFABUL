@@ -18,11 +18,12 @@ class Responsable(User):
         Returns:
             Responsable: Instancia de la clase Responsable.
         """
-        with sqlite3.connect('db/db.sqlite') as connection:
-            cursor = connection.cursor()
-            cursor.execute('''
-                SELECT users.user_id, users.nombre, users.salt, users.hash
-                FROM users
-                WHERE user_id = ?
-            ''', (responsable_id,))
-            return Responsable(*cursor.fetchone())
+        connection = sqlite3.connect('db/db.sqlite')
+        responsable = connection.execute('''
+            SELECT user_id, nombre, salt, hash
+            FROM users
+            WHERE user_id = ?
+        ''', (responsable_id,)).fetchone()
+        connection.close()
+        
+        return Responsable(*responsable)

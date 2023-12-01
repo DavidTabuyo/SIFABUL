@@ -1,9 +1,26 @@
 from controller.controlador_user import ControladorUser
 from model.becario import Becario
+from model.fichaje import Fichaje
+from model.notificacion_becario import NotificacionBecario
+from model.semana import Semana
+
 
 class ControladorBecario(ControladorUser):
     def __init__(self, becario: Becario) -> None:
         super().__init__(becario)
+        
+    def get_notificaciones(self) -> list[NotificacionBecario]:
+        ...
+        
+    def get_fichajes_hoy(self) -> list[Fichaje]:
+        ...
+        
+    def get_resumen_semanas(self) -> list[Semana]:
+        ...
+    
+    def fichar(self):
+        ...
+    
 
 
         

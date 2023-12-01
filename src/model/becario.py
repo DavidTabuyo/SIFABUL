@@ -22,12 +22,13 @@ class Becario(User):
         Returns:
             Becario: Instancia de la clase Becario.
         """
-        with sqlite3.connect('db/db.sqlite') as connection:
-            cursor = connection.cursor()
-            cursor.execute('''
-                SELECT users.user_id, users.nombre, users.salt, users.hash, becarios.responsable_id
-                FROM users
-                JOIN becarios ON users.user_id = becarios.becario_id
-                WHERE user_id = ?
-            ''', (becario_id,))
-            return Becario(*cursor.fetchone())
+        connection = sqlite3.connect('db/db.sqlite')
+        becario = connection.execute('''
+            SELECT users.user_id, users.nombre, users.salt, users.hash, becarios.responsable_id
+            FROM users
+            JOIN becarios ON users.user_id = becarios.becario_id
+            WHERE user_id = ?
+        ''', (becario_id,)).fetchone()
+        connection.close()
+        
+        return Becario(*becario)

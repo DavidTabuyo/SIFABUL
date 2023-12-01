@@ -1,9 +1,33 @@
 from controller.controlador_user import ControladorUser
+from model.becario import Becario
+from model.notificacion_responsable import NotificacionResponsable
 from model.responsable import Responsable
+from model.semana import Semana
 
 class ControladorResponsable(ControladorUser):
     def __init__(self, responsable: Responsable) -> None:
         super().__init__(responsable)
+        
+    def get_notificaciones(self) -> list[NotificacionResponsable]:
+        ...
+
+    def get_becarios(self) -> list[Becario]:
+        ...
+        
+    def get_resumen_semanas(self) -> list[Semana]:
+        ...
+        
+    def add_user(self):
+        ...
+        
+    def add_notificacion(self):
+        ...
+        
+    def delete_user(self):
+        ...
+        
+    def delete_notificacion(self):
+        ...
         
         
         
