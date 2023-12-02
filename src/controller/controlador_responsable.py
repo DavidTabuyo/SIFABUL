@@ -2,35 +2,31 @@ from controller.controlador_user import ControladorUser
 from model.becario import Becario
 from model.notificacion_responsable import NotificacionResponsable
 from model.responsable import Responsable
-from model.semana import Semana
+
 
 class ControladorResponsable(ControladorUser):
     def __init__(self, responsable: Responsable) -> None:
         super().__init__(responsable)
-        
+
     def get_notificaciones(self) -> list[NotificacionResponsable]:
         ...
 
     def get_becarios(self) -> list[Becario]:
         ...
-        
-    def get_resumen_semanas(self) -> list[Semana]:
-        ...
-        
+
     def add_user(self):
         ...
-        
+
     def add_notificacion(self):
         ...
-        
+
     def delete_user(self):
         ...
-        
+
     def delete_notificacion(self):
         ...
-        
-        
-        
+
+
 # class __ControladorResponsable(__Controlador):
 #     def get_becarios(self) -> list[Becario]:
 #         '''
@@ -45,7 +41,7 @@ class ControladorResponsable(ControladorUser):
 #                 WHERE becarios.responsable_id = ?
 #             ''', (self._user_id,))
 #             return [Becario(*becario) for becario in cursor.fetchall()]
-        
+
 #     def get_notificaiones(self) -> list[Notificacion]:
 #         '''
 #         Devuelve una lista de (titulo, descripcion) de todas las notificaciones
@@ -61,21 +57,20 @@ class ControladorResponsable(ControladorUser):
 #                 ORDER BY notificaciones.fecha_hora DESC
 #             ''', (self._user_id,))
 #             return [Notificacion(*rest, is_all_vista or self._get_is_all_vista(id)) for (id, *rest, is_all_vista) in cursor.fetchall()]
-    
+
 #     def _get_is_all_vista(self, notificacion_id: str) -> bool:
 #         '''
 #         Devuelve si una notificacion ha sido vista
 #         '''
-    
+
 #     def add_user(self, new_user_email: str, new_user_password: str) -> bool:
 #         '''
 #         Devuelve false si ya existe ese usuario
 #         Dependiendo si es becario, lo añade con self como responsable
 #         '''
 #         ...
-    
+
 #     def add_notificacion(self, titulo: str, descripcion: str, becario_ids: list[str]):
 #         '''
 #         Añade notificaciones a los becarios pasados en la lista
 #         '''
-        

@@ -1,5 +1,7 @@
 import sqlite3
 
+from model.semana import Semana
+
 
 class User:
     def __init__(self, user_id: str, nombre: str, salt: bytes, hash: bytes):
@@ -7,12 +9,22 @@ class User:
         self.nombre = nombre
         self.salt = salt
         self.hash = hash
-        
-        
+
     def check_password(self, password):
         ...
-        
-        
+
+    def get_semanas(self, becario_id: str) -> list[Semana]:
+        connection = sqlite3.connect('db/db.sqlite')
+        semanas = connection.execute('''
+            SELECT becario_id, lunes, total_semana
+            FROM semanas
+            WHERE becario_id = ?
+            ORDER BY lunes
+        ''', (becario_id,)).fetchall()
+        connection.close()
+
+        return [Semana(*semana) for semana in semanas]
+
     @staticmethod
     def is_becario(user_id: str) -> bool:
         '''
@@ -30,8 +42,7 @@ class User:
                 SELECT * FROM becarios WHERE becario_id = ?
             ''', (user_id,))
             return bool(cursor.fetchone())
-    
-    
+
     @staticmethod
     def is_responsable(user_id: str) -> bool:
         '''
