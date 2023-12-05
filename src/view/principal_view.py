@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QMessageBox, QLineEdit
 from PyQt5 import uic
+from controller.controlador_becario import ControladorBecario
 from view.becario_view import BecarioView
 from view.responsable_view import ResponsableView
 from controller.controlador_principal import login
@@ -27,6 +28,16 @@ class PrincipalView(QMainWindow):
         #comprobamos si es correcto o n
         try:
             controlador = login(self.UserName.text(), self.Password.text())
+            #dependiendo del tipo de controlador que sea, llamamos a una vista
+            self.close()
+            if isinstance(controlador,ControladorBecario):
+                self.nueva_ventana= BecarioView()
+            else:
+                self.nueva_ventana= ResponsableView()
+
+            self.nueva_ventana.show()
+            
+
         except LookupError as e:
             mensaje_error = QMessageBox()
             mensaje_error.setIcon(QMessageBox.Critical)
