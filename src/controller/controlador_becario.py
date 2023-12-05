@@ -5,14 +5,31 @@ from model.becario import Becario
 from model.fichaje import Fichaje
 from model.notificacion_becario import NotificacionBecario
 from model.semana import Semana
+from io import StringIO 
+
 
 
 class ControladorBecario(ControladorUser):
     def __init__(self, becario: Becario) -> None:
         self.user = becario
 
-    def get_notificaciones(self) -> list[NotificacionBecario]:
-        return self.user.get_notificaciones()
+    def get_notificaciones(self) -> list[StringIO]:
+        #cuando llamemos a este metodo significa que el becario ya ha visto todas las notificaciones
+        listaNot= self.user.get_notificaciones()
+        listaFormateada= []
+        for obj in listaNot:
+            obj.is_vista=True
+            s = StringIO()
+            s.write(obj.titulo+" "+obj.fecha_hora)
+            s.write('\n')
+            s.write(obj.descripcion)
+            listaFormateada.append(s)
+
+        #devolvemos lista notificaciones en el formato de string
+        print(listaFormateada)
+        return listaFormateada
+
+        
 
     def get_fichajes_hoy(self) -> list[Fichaje]:
         # Obtener fecha actual real

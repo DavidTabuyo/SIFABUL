@@ -31,9 +31,9 @@ class PrincipalView(QMainWindow):
             #dependiendo del tipo de controlador que sea, llamamos a una vista
             self.close()
             if isinstance(controlador,ControladorBecario):
-                self.nueva_ventana= BecarioView()
+                self.nueva_ventana= BecarioView(controlador)
             else:
-                self.nueva_ventana= ResponsableView()
+                self.nueva_ventana= ResponsableView(controlador)
 
             self.nueva_ventana.show()
             

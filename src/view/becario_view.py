@@ -1,9 +1,11 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel,QSizePolicy
+from PyQt5.QtWidgets import QMainWindow, QLabel,QSizePolicy,QListWidgetItem
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
+from controller.controlador_becario import ControladorBecario
 
 class BecarioView(QMainWindow):
-    def __init__(self):
+    def __init__(self,becario:ControladorBecario):
+        self.becario=becario
         super().__init__()
         uic.loadUi('src/view/ui/becario_view.ui', self)
         self.BtnFichar.clicked.connect(self.BtnFichar_clicked)
@@ -20,6 +22,14 @@ class BecarioView(QMainWindow):
             else:
                 etiqueta.setStyleSheet('background-color: red;font-size: 20px;border-radius: 10px;')
         #llamamos a get notificaciones y obtenemos lista de notificaciones
+        listaNot= becario.get_notificaciones
+        '''
+                for texto in listaNot:
+            item = QListWidgetItem(texto)
+            self.list_view.addItem(item)
+        
+        '''
+
 
 
     def BtnFichar_clicked(self):
