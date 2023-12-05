@@ -1,5 +1,4 @@
 import sqlite3
-
 from model.semana import Semana
 
 
@@ -9,9 +8,6 @@ class User:
         self.nombre = nombre
         self.salt = salt
         self.hash = hash
-
-    def check_password(self, password):
-        ...
 
     def get_semanas(self, becario_id: str) -> list[Semana]:
         connection = sqlite3.connect('db/db.sqlite')

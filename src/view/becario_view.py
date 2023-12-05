@@ -10,9 +10,10 @@ class BecarioView(QMainWindow):
         uic.loadUi('src/view/ui/becario_view.ui', self)
         self.BtnFichar.clicked.connect(self.BtnFichar_clicked)
         self.btnResumen.clicked.connect(self.btnResumen_clicked)
+        
         #ejemplo **llamamos a get fichajes**
         fichajes = ['kk:05', 'kk:04', 'kk:03', 'kk:02', 'kk:01']
-        for index,objeto in enumerate(fichajes):           
+        for index, objeto in enumerate(fichajes):           
             etiqueta = QLabel(str(objeto))
             self.layoutFichajes.addWidget(etiqueta)
             etiqueta.setAlignment(Qt.AlignCenter)
@@ -21,6 +22,8 @@ class BecarioView(QMainWindow):
                 etiqueta.setStyleSheet('background-color: green;font-size: 20px;border-radius: 10px;')
             else:
                 etiqueta.setStyleSheet('background-color: red;font-size: 20px;border-radius: 10px;')
+
+
         #llamamos a get notificaciones y obtenemos lista de notificaciones
         listaNot= becario.get_notificaciones
         '''

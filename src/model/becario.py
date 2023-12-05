@@ -27,7 +27,7 @@ class Becario(User):
             JOIN becarios_notificaciones ON becarios_notificaciones.notificacion_id = notificaciones.notificacion_id
             WHERE becario_id = ?
             ORDER BY fecha_hora DESC
-        ''', (self._user_id,)).fetchall()
+        ''', (self.user_id,)).fetchall()
         connection.close()
 
         return [NotificacionBecario(*notificacion) for notificacion in notificaciones]

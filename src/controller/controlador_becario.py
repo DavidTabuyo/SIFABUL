@@ -5,7 +5,6 @@ from model.becario import Becario
 from model.fichaje import Fichaje
 from model.notificacion_becario import NotificacionBecario
 from model.semana import Semana
-from io import StringIO 
 
 
 
@@ -13,23 +12,10 @@ class ControladorBecario(ControladorUser):
     def __init__(self, becario: Becario) -> None:
         self.user = becario
 
-    def get_notificaciones(self) -> list[StringIO]:
+    def get_notificaciones(self) -> list[str]:
         #cuando llamemos a este metodo significa que el becario ya ha visto todas las notificaciones
-        listaNot= self.user.get_notificaciones()
-        listaFormateada= []
-        for obj in listaNot:
-            obj.is_vista=True
-            s = StringIO()
-            s.write(obj.titulo+" "+obj.fecha_hora)
-            s.write('\n')
-            s.write(obj.descripcion)
-            listaFormateada.append(s)
-
-        #devolvemos lista notificaciones en el formato de string
-        print(listaFormateada)
-        return listaFormateada
-
-        
+        notificaciones = self.user.get_notificaciones()
+        return [f'{notificacion.titulo} {notificacion.fecha_hora}' for notificacion in notificaciones]
 
     def get_fichajes_hoy(self) -> list[Fichaje]:
         # Obtener fecha actual real
@@ -46,52 +32,6 @@ class ControladorBecario(ControladorUser):
 
 
 # class __ControladorBecario(__Controlador):
-#     def get_fichajes_hoy(self) -> list[Fichaje]:
-#         '''
-#         Devuelve todos los fichajes del dia en forma de [('HH:mm', True), ...]
-#         '''
-#         # Obtener fecha actual real
-#         timestamp = arrow.get(requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
-#         fecha = timestamp.format('YYYY-MM-DD')
-
-#         # Obtener todos los fichajes de hoy
-#         with sqlite3.connect('db/db.sqlite') as connection:
-#             cursor = connection.cursor()
-#             cursor.execute('''
-#                 SELECT hora, is_entrada
-#                 FROM fichajes
-#                 WHERE becario_id = ? and fecha = ?
-#                 ORDER BY hora DESC
-#             ''', (self._user_id, fecha))
-#             fichajes = cursor.fetchall() or ()
-
-#             # Formatear el resultado: [('HH:mm', True), ...]
-#             return [Fichaje(hora[:-3], bool(is_entrada)) for (hora, is_entrada) in fichajes]
-
-#     def get_notificaciones(self) -> list[Notificacion]:
-#         '''
-#         Devuelve una lista con notificaciones(titulo, descripcion, fecha_hora, is_vista)
-#         '''
-#         with sqlite3.connect('db/db.sqlite') as connection:
-#             cursor = connection.cursor()
-#             cursor.execute('''
-#                 SELECT notificaciones.titulo, notificaciones.descripcion, notificaciones.fecha_hora, becarios_notificaciones.is_vista
-#                 FROM notificaciones
-#                 JOIN becarios_notificaciones ON becarios_notificaciones.notificacion_id = notificaciones.notificacion_id
-#                 WHERE becario_id = ?
-#                 ORDER BY fecha_hora DESC
-#             ''', (self._user_id,))
-#             notificaiones = cursor.fetchall()
-
-#             # Cambio de 0, 1 a False, True
-#             return [Notificacion(*rest, bool(is_vista)) for (*rest, is_vista) in notificaiones]
-
-#     def get_resumen_semanas(self) -> list[int]:
-#         '''
-#         Devuelve una lista con las horas que ha estado fichado en cada semana en n semanas
-#         '''
-#         return super().get_resumen_semanas(self._user_id)
-
 #     def add_fichaje(self):
 #         '''
 #         Añade un fichaje a la hora actual y actualiza la semana

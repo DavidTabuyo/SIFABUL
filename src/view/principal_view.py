@@ -28,13 +28,14 @@ class PrincipalView(QMainWindow):
         #comprobamos si es correcto o n
         try:
             controlador = login(self.UserName.text(), self.Password.text())
+            
             #dependiendo del tipo de controlador que sea, llamamos a una vista
-            self.close()
-            if isinstance(controlador,ControladorBecario):
-                self.nueva_ventana= BecarioView(controlador)
+            if type(controlador) == ControladorBecario:
+                self.nueva_ventana = BecarioView(controlador)
             else:
-                self.nueva_ventana= ResponsableView(controlador)
+                self.nueva_ventana = ResponsableView(controlador)
 
+            self.close()
             self.nueva_ventana.show()
             
 
