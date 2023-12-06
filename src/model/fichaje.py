@@ -6,3 +6,6 @@ class Fichaje:
         self.fecha = arrow.get(fecha, 'YYYY/MM/DD')
         self.hora = arrow.get(hora, 'HH:mm:ss')
         self.is_entrada = bool(is_entrada)
+
+    def getOutput(self) -> str:
+        ...

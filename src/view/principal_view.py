@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QMainWindow, QMessageBox, QLineEdit
 from PyQt5 import uic
 from controller.controlador_becario import ControladorBecario
-from view.becario_view import BecarioView
-from view.responsable_view import ResponsableView
+from view.worker_view import WorkerView
+from view.admin_view import AdminView
 from controller.controlador_principal import login
 
 
@@ -31,9 +31,9 @@ class PrincipalView(QMainWindow):
             
             #dependiendo del tipo de controlador que sea, llamamos a una vista
             if type(controlador) == ControladorBecario:
-                self.nueva_ventana = BecarioView(controlador)
+                self.nueva_ventana = WorkerView(controlador)
             else:
-                self.nueva_ventana = ResponsableView(controlador)
+                self.nueva_ventana = AdminView(controlador)
 
             self.close()
             self.nueva_ventana.show()

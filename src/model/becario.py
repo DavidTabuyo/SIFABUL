@@ -50,7 +50,7 @@ class Becario(User):
             ORDER BY hora DESC
         ''', (self.user_id, fecha)).fetchall()
         connection.close()
-
+        print(fichajes)
         return [Fichaje(*fichaje) for fichaje in fichajes]
 
     def get_semanas(self) -> list[Semana]:

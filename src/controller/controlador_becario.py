@@ -29,6 +29,10 @@ class ControladorBecario(ControladorUser):
 
     def fichar(self):
         ...
+    
+    def get_resumen(self):
+        ...
+    
 
 
 # class __ControladorBecario(__Controlador):
