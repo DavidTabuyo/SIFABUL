@@ -17,32 +17,17 @@ class WorkerView(QMainWindow):
         self.btnChangePassword.clicked.connect(self.btnChangePassword_clicked)
 
         #actualizamos la lista de fichajes
-        fichajes = becario.get_fichajes_hoy()
-        for object in fichajes:           
-            etiqueta = QLabel(str(object.getOutput))
-            self.layoutFichajes.addWidget(etiqueta)
-            etiqueta.setAlignment(Qt.AlignCenter)
-            etiqueta.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            if object.is_entrada:
-                etiqueta.setStyleSheet('background-color: green;font-size: 20px;border-radius: 10px;')
-            else:
-                etiqueta.setStyleSheet('background-color: red;font-size: 20px;border-radius: 10px;')
-                
+        self.update_fichajes()
+
         #llamamos a get notificaciones y obtenemos lista de notificaciones
-        listaNot= becario.get_notificaciones()
-        '''
-                for texto in listaNot:
-            item = QListWidgetItem(texto)
-            self.list_view.addItem(item)
-        
-        '''
+        self.update_notifications()
 
 
 
     def BtnFichar_clicked(self):
         #el becario ficha entrada o salida
         try:
-            self.worker.fichar
+            self.worker.fichar()
         except LookupError as e:
             #pulsamos el boton dos veces seguidas(mismo minuto)
             error_message = QMessageBox()
@@ -61,6 +46,31 @@ class WorkerView(QMainWindow):
     def btnChangePassword_clicked(seld):
         #bbecario quiere cambiar su contraseña
         ...
+        
+    def update_fichajes(self):
+        fichajes = self.worker.get_fichajes_hoy()
+        for object in fichajes:           
+            label = QLabel(object.get_output())
+            self.layoutFichajes.addWidget(label)
+            label.setAlignment(Qt.AlignCenter)
+            label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            if object.is_entrada:
+                label.setStyleSheet('background-color: green;font-size: 20px;border-radius: 10px;')
+            else:
+                label.setStyleSheet('background-color: red;font-size: 20px;border-radius: 10px;')
+                
+    def update_notifications(self):
+        listaNot= self.worker.get_notificaciones()
+        '''
+                for texto in listaNot:
+            item = QListWidgetItem(texto)
+            self.list_view.addItem(item)
+        
+        '''
+
+        
+
+        
 
 
 

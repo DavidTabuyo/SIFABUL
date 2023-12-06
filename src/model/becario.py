@@ -52,6 +52,9 @@ class Becario(User):
         connection.close()
         print(fichajes)
         return [Fichaje(*fichaje) for fichaje in fichajes]
+    
+    def get_last_fichaje(self,fecha_str):
+        ...
 
     def get_semanas(self) -> list[Semana]:
         return super().get_semanas(self.user_id)

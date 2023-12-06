@@ -7,5 +7,8 @@ class Fichaje:
         self.hora = arrow.get(hora, 'HH:mm:ss')
         self.is_entrada = bool(is_entrada)
 
-    def getOutput(self) -> str:
-        ...
+    def get_output(self) -> str:
+        return self.hora.format("HH:mm:ss")
+    
+    def get_minutes(seld) ->str:
+        return self.hora.minute

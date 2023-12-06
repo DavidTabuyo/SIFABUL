@@ -18,20 +18,29 @@ class ControladorBecario(ControladorUser):
         return [f'{notificacion.titulo} {notificacion.fecha_hora}' for notificacion in notificaciones]
 
     def get_fichajes_hoy(self) -> list[Fichaje]:
-        # Obtener fecha actual real
-        timestamp = arrow.get(requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
-        fecha = timestamp.format('YYYY-MM-DD')
-
-        return self.user.get_fichajes_hoy(fecha)
+        return self.user.get_fichajes_hoy(self.get_fecha())
 
     def get_semanas(self, n: int) -> list[Semana]:
         return super().get_semanas(self.user.user_id, n)
 
-    def fichar(self):
-        ...
+    def fichar(self) -> Fichaje:
+        #creamos un nuevo objeto de tipo fichar
+        new_fichaje=Fichaje()
+        if new_fichaje.get_minutes()==user.get_last_fichaje(self.get_fecha).get_minutes():
+            #si se ha fichado en el mismo minuto, lanzamos el error
+            raise LookupError('Ya has fichado')
+        return new_fichaje            
     
     def get_resumen(self):
         ...
+    
+    def get_fecha(self):
+        # Obtener fecha actual real
+        timestamp = arrow.get(requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
+        return timestamp.format('YYYY/MM/DD')
+        
+    
+    
     
 
 

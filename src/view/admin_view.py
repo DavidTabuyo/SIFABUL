@@ -5,3 +5,4 @@ class AdminView(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('src/view/ui/admin_view.ui', self)
+    
