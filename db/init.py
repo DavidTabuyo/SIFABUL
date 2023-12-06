@@ -3,26 +3,24 @@ import os
 import bcrypt
 
 
-try:
-    os.remove('db/db.sqlite')
-except:
-    pass
+os.remove('db/db.sqlite')
 
-
+with open('db/init.sql', 'r') as file:
+    sql_script = file.read()
+    
 connection = sqlite3.connect('db/db.sqlite')
+connection.executescript(sql_script)
+connection.commit()
+connection.close()
 
-connection.execute('''
-    CREATE TABLE users (
-        user_id TEXT PRIMARY KEY,
-        nombre TEXT NOT NULL,
-        salt BLOB NOT NULL,
-        hash BLOB NOT NULL
-    );
-''')
+
+
+# --------------- temp inserts ---------------
+connection = sqlite3.connect('db/db.sqlite')
 
 sales = [bcrypt.gensalt() for _ in range(5)]
 connection.execute('''
-    INSERT INTO users (user_id, nombre, salt, hash) VALUES
+    INSERT INTO users (user_id, name, salt, hash) VALUES
         ('ogingd00', 'Demi', ?, ?),
         ('vtunog00', 'Victor', ?, ?),
         ('dmartm14', 'Dario', ?, ?),
@@ -35,7 +33,7 @@ connection.execute('''
       sales[4], bcrypt.hashpw('hola'.encode('utf-8'), sales[4])))
 
 
-with open('db/__setup.sql', 'r', encoding='utf-8') as file:
+with open('db/temp_inserts.sql', 'r', encoding='utf-8') as file:
     sql_script = file.read()
 
 connection.executescript(sql_script)
