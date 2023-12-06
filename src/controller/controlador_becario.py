@@ -12,7 +12,7 @@ class ControladorBecario(ControladorUser):
     def __init__(self, becario: Worker) -> None:
         self.user = becario
 
-    def get_notificaciones(self) -> list[str]:
+    def get_notificaciones(self) -> list[NotificationWorker]:
         #cuando llamemos a este metodo significa que el becario ya ha visto todas las notificaciones
         notificaciones = self.user.get_notificaciones()
         return [f'{notificacion.titulo} {notificacion.fecha_hora}' for notificacion in notificaciones]
@@ -23,7 +23,7 @@ class ControladorBecario(ControladorUser):
     def get_semanas(self, n: int) -> list[Week]:
         return super().get_semanas(self.user.user_id, n)
 
-    def fichar(self) -> Check:
+    def check(self) -> Check:
         #creamos un nuevo objeto de tipo fichar
         new_fichaje=Check()
         if new_fichaje.get_minutes()==self.user.get_last_fichaje(self.get_fecha).get_minutes():

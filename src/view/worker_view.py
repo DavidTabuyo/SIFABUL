@@ -27,7 +27,16 @@ class WorkerView(QMainWindow):
     def BtnFichar_clicked(self):
         #el becario ficha entrada o salida
         try:
-            self.worker.fichar()
+            check=self.worker.check()
+            label = QLabel(check.get_output())
+            self.layoutFichajes.addWidget(label)
+            label.setAlignment(Qt.AlignCenter)
+            label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            if check.is_entry:
+                label.setStyleSheet('background-color: green;font-size: 20px;border-radius: 10px;')
+            else:
+                label.setStyleSheet('background-color: red;font-size: 20px;border-radius: 10px;')
+                
         except LookupError as e:
             #pulsamos el boton dos veces seguidas(mismo minuto)
             error_message = QMessageBox()
@@ -54,13 +63,20 @@ class WorkerView(QMainWindow):
             self.layoutFichajes.addWidget(label)
             label.setAlignment(Qt.AlignCenter)
             label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            if object.is_entrada:
+            if object.is_entry:
                 label.setStyleSheet('background-color: green;font-size: 20px;border-radius: 10px;')
             else:
                 label.setStyleSheet('background-color: red;font-size: 20px;border-radius: 10px;')
                 
     def update_notifications(self):
         listaNot= self.worker.get_notificaciones()
+        for i in listaNot:
+            label = QLabel(i.get_output())
+            self.notifications_layout.addWidget(label)
+            label.setAlignment(Qt.AlignCenter)
+            label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            
+            
         '''
                 for texto in listaNot:
             item = QListWidgetItem(texto)
