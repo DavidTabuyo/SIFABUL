@@ -1,5 +1,5 @@
 import bcrypt
-from model.semana import Semana
+from model.week import Week
 from model.user import User
 
 

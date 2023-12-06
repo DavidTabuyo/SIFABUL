@@ -3,7 +3,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from controller.controlador_becario import ControladorBecario
 from view.summary_view import SummaryView
-from model.fichaje import Fichaje
+from model.check import Check
 
 class WorkerView(QMainWindow):
     def __init__(self,becario:ControladorBecario):

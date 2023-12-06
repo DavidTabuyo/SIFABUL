@@ -1,8 +1,8 @@
 from controller.controlador_becario import ControladorBecario
 from controller.controlador_responsable import ControladorResponsable
 from model.user import User
-from model.becario import Becario
-from model.responsable import Responsable
+from model.worker import Worker
+from model.admin import Admin
 
 
 def login(user_id: str, password: str) -> ControladorBecario | ControladorResponsable:
@@ -24,7 +24,7 @@ def login(user_id: str, password: str) -> ControladorBecario | ControladorRespon
     """
     # Comprueba si es becario
     if User.is_becario(user_id):
-        becario = Becario.from_id(user_id)
+        becario = Worker.from_id(user_id)
         controlador_becario = ControladorBecario(becario)
 
         # Comprueba contraseña
@@ -36,7 +36,7 @@ def login(user_id: str, password: str) -> ControladorBecario | ControladorRespon
         
     # Comprueba si es responsable
     if User.is_responsable(user_id):
-        responsable = Responsable.from_id(user_id)
+        responsable = Admin.from_id(user_id)
         controlador_responsable = ControladorResponsable(responsable)
 
         # Comprueba contraseña

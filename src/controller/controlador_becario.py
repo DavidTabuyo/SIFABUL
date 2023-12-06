@@ -1,15 +1,15 @@
 import arrow
 import requests
 from controller.controlador_user import ControladorUser
-from model.becario import Becario
-from model.fichaje import Fichaje
-from model.notificacion_becario import NotificacionBecario
-from model.semana import Semana
+from model.worker import Worker
+from model.check import Check
+from model.notification_worker import NotificationWorker
+from model.week import Week
 
 
 
 class ControladorBecario(ControladorUser):
-    def __init__(self, becario: Becario) -> None:
+    def __init__(self, becario: Worker) -> None:
         self.user = becario
 
     def get_notificaciones(self) -> list[str]:
@@ -17,16 +17,16 @@ class ControladorBecario(ControladorUser):
         notificaciones = self.user.get_notificaciones()
         return [f'{notificacion.titulo} {notificacion.fecha_hora}' for notificacion in notificaciones]
 
-    def get_fichajes_hoy(self) -> list[Fichaje]:
+    def get_fichajes_hoy(self) -> list[Check]:
         return self.user.get_fichajes_hoy(self.get_fecha())
 
-    def get_semanas(self, n: int) -> list[Semana]:
+    def get_semanas(self, n: int) -> list[Week]:
         return super().get_semanas(self.user.user_id, n)
 
-    def fichar(self) -> Fichaje:
+    def fichar(self) -> Check:
         #creamos un nuevo objeto de tipo fichar
-        new_fichaje=Fichaje()
-        if new_fichaje.get_minutes()==user.get_last_fichaje(self.get_fecha).get_minutes():
+        new_fichaje=Check()
+        if new_fichaje.get_minutes()==self.user.get_last_fichaje(self.get_fecha).get_minutes():
             #si se ha fichado en el mismo minuto, lanzamos el error
             raise LookupError('Ya has fichado')
         return new_fichaje            
