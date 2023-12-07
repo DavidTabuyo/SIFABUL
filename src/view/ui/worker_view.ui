@@ -14,16 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QListView" name="vistaNotificacion">
-    <property name="geometry">
-     <rect>
-      <x>405</x>
-      <y>20</y>
-      <width>381</width>
-      <height>551</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
@@ -87,6 +77,17 @@
     <property name="text">
      <string>CAMBIAR CONTRASEÑA</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>60</y>
+      <width>160</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="notifications_layout"/>
    </widget>
   </widget>
  </widget>
