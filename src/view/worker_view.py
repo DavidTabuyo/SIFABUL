@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QLabel,QSizePolicy,QMessageBox
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from controller.controlador_becario import ControladorBecario
+from view.change_password_view import ChangePasswordView
 from view.summary_view import SummaryView
 from model.check import Check
 
@@ -54,7 +55,8 @@ class WorkerView(QMainWindow):
 
     def btnChangePassword_clicked(seld):
         #bbecario quiere cambiar su contraseña
-        ...
+        self.nueva_ventana= ChangePasswordView()
+        self.nueva_ventana.show()
         
     def update_fichajes(self):
         fichajes = self.worker.get_fichajes_hoy()
@@ -69,20 +71,16 @@ class WorkerView(QMainWindow):
                 label.setStyleSheet('background-color: red;font-size: 20px;border-radius: 10px;')
                 
     def update_notifications(self):
-        listaNot= self.worker.get_notificaciones()
-        for i in listaNot:
+        notList= self.worker.get_notificaciones()
+        for i in notList:
             label = QLabel(i.get_output())
             self.notifications_layout.addWidget(label)
             label.setAlignment(Qt.AlignCenter)
             label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            
-            
-        '''
-                for texto in listaNot:
-            item = QListWidgetItem(texto)
-            self.list_view.addItem(item)
-        
-        '''
+            if i.is_seen:
+                label.setStyleSheet('background-color: green;font-size: 20px;border-radius: 10px;')
+            else:
+                label.setStyleSheet('background-color: red;font-size: 20px;border-radius: 10px;')
 
         
 

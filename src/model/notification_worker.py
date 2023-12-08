@@ -6,8 +6,6 @@ class NotificationWorker:
         self.is_seen = is_seen
         
     def get_output(self) -> str:
-        fecha_hora_formateada = f"{self.datetime}"
-
         # Construir el string formateado
-        return  f"Título: {self.title}\nFecha y Hora: {fecha_hora_formateada}\n\nDescripción: {self.description}"
+        return  f"Título: {self.title}\nFecha y Hora: {self.datetime}\n\nDescripción: {self.description}"
         
