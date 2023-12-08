@@ -4,7 +4,6 @@ from PyQt5.QtCore import Qt
 from controller.controlador_becario import ControladorBecario
 from view.change_password_view import ChangePasswordView
 from view.summary_view import SummaryView
-from model.check import Check
 
 class WorkerView(QMainWindow):
     def __init__(self,becario:ControladorBecario):
@@ -53,7 +52,7 @@ class WorkerView(QMainWindow):
         self.nueva_ventana= SummaryView()
         self.nueva_ventana.show()
 
-    def btnChangePassword_clicked(seld):
+    def btnChangePassword_clicked(self):
         #bbecario quiere cambiar su contraseña
         self.nueva_ventana= ChangePasswordView()
         self.nueva_ventana.show()
