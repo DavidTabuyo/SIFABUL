@@ -1,20 +1,18 @@
-from controller.user_controller import User_controller
-from model.dao.admin_dao import Admin_dao
+from controller.user_controller import UserController
+from model.dao.admin_dao import AdminDao
 from model.worker import Worker
 from model.notification import Notification
-from model.admin import Admin
 
 
-class AdminController(User_controller):
-    def __init__(self, admin_ID: str) -> None:
-        self.admin_ID=admin_ID
-        super().__init__(admin_ID)
+class AdminController(UserController):
+    def __init__(self, admin_id: str):
+        self.admin_id = admin_id
 
     def get_notifications(self) -> list[Notification]:
-        return Admin_dao.get_notifications(self.adminID)
+        return AdminDao.get_notifications(self.admin_id)
 
     def get_workers(self) -> list[Worker]:
-        return Admin_dao.get_workers(self.adminID)
+        return AdminDao.get_workers(self.admin_id)
 
     def add_user(self):
         ...

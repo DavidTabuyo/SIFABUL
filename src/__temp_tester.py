@@ -1,6 +1,4 @@
-from controller.controlador_principal import login
+from controller.login_controller import login
 
 
 controlador = login('dtabum00', 'hola')
-
-print(controlador.get_fichajes_hoy())
