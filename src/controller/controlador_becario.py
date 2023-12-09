@@ -1,6 +1,6 @@
 import arrow
 import requests
-from controller.controlador_user import ControladorUser
+from controller.user_controller import User_controller
 from model.worker import Worker
 from model.check import Check
 from model.notification_worker import NotificationWorker
@@ -8,7 +8,7 @@ from model.week import Week
 
 
 
-class ControladorBecario(ControladorUser):
+class ControladorBecario(User_controller):
     def __init__(self, becario: Worker) -> None:
         self.user = becario
 

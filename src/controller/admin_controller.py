@@ -1,18 +1,20 @@
-from controller.controlador_user import ControladorUser
+from controller.user_controller import User_controller
+from model.dao.admin_dao import Admin_dao
 from model.worker import Worker
 from model.notification import Notification
 from model.admin import Admin
 
 
-class AdminController(ControladorUser):
-    def __init__(self, responsable: Admin) -> None:
-        super().__init__(responsable)
+class AdminController(User_controller):
+    def __init__(self, admin_ID: str) -> None:
+        self.admin_ID=admin_ID
+        super().__init__(admin_ID)
 
     def get_notifications(self) -> list[Notification]:
-        ...
+        return Admin_dao.get_notifications(self.adminID)
 
     def get_workers(self) -> list[Worker]:
-        ...
+        return Admin_dao.get_workers(self.adminID)
 
     def add_user(self):
         ...
@@ -32,15 +34,6 @@ class AdminController(ControladorUser):
 #         '''
 #         Devuelve una lista de sus becarios
 #         '''
-#         with sqlite3.connect('db/db.sqlite') as connection:
-#             cursor = connection.cursor()
-#             cursor.execute('''
-#                 SELECT becarios.becario_id, users.nombre
-#                 FROM becarios
-#                 JOIN users ON users.user_id = becarios.becario_id
-#                 WHERE becarios.responsable_id = ?
-#             ''', (self._user_id,))
-#             return [Becario(*becario) for becario in cursor.fetchall()]
 
 #     def get_notificaiones(self) -> list[Notificacion]:
 #         '''

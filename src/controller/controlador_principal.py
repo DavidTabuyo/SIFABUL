@@ -1,11 +1,11 @@
+from controller.admin_controller import AdminController
 from controller.controlador_becario import ControladorBecario
-from controller.controlador_responsable import ControladorResponsable
-from model.user import User
+from model.dao.user_dao import User_dao
 from model.worker import Worker
 from model.admin import Admin
 
 
-def login(user_id: str, password: str) -> ControladorBecario | ControladorResponsable:
+def login(user_id: str, password: str) -> ControladorBecario | AdminController:
     """
     Realiza el proceso de inicio de sesión para un usuario.
 
@@ -23,7 +23,7 @@ def login(user_id: str, password: str) -> ControladorBecario | ControladorRespon
         LookupError: Se lanza si el usuario no se encuentra en el sistema.
     """
     # Comprueba si es becario
-    if User.is_becario(user_id):
+    if User_dao.is_worker(user_id):
         becario = Worker.from_id(user_id)
         controlador_becario = ControladorBecario(becario)
 
@@ -35,9 +35,9 @@ def login(user_id: str, password: str) -> ControladorBecario | ControladorRespon
         
         
     # Comprueba si es responsable
-    if User.is_responsable(user_id):
+    if User_dao.is_admin(user_id):
         responsable = Admin.from_id(user_id)
-        controlador_responsable = ControladorResponsable(responsable)
+        controlador_responsable = AdminController(responsable)
 
         # Comprueba contraseña
         if not controlador_responsable.check_password(password):
