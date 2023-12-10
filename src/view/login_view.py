@@ -6,7 +6,7 @@ from view.admin_view import AdminView
 from controller.login_controller import login
 
 
-class PrincipalView(QMainWindow):
+class LoginView(QMainWindow):
 
     def __init__(self):
         super().__init__()

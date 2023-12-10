@@ -10,3 +10,10 @@ class Check:
 
     def get_minutes(self) -> str:
         return self.time[3:5]
+
+    def get_next_status(self) ->int:
+        if self.is_entry==0:
+            return 1
+        else:
+            return 0
+        

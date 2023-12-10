@@ -1,3 +1,4 @@
+import sqlite3
 from model.week import Week
 from model.user import User
 
@@ -14,7 +15,7 @@ class UserDao:
     @staticmethod
     def get_user(user_id: str) -> User:
         ...
-
+        
     @staticmethod
     def get_weeks(worker_id: str) -> list[Week]:
         ...

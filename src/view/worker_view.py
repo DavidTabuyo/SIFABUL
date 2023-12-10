@@ -58,7 +58,7 @@ class WorkerView(QMainWindow):
         self.nueva_ventana.show()
 
     def update_fichajes(self):
-        fichajes = self.worker.get_fichajes_hoy()
+        fichajes = self.worker.get_today_checks()
         for object in fichajes:
             label = QLabel(object.get_output())
             self.layoutFichajes.addWidget(label)
@@ -72,7 +72,7 @@ class WorkerView(QMainWindow):
                     'background-color: red;font-size: 20px;border-radius: 10px;')
 
     def update_notifications(self):
-        notList = self.worker.get_notificaciones()
+        notList = self.worker.get_notifications()
         for i in notList:
             label = QLabel(i.get_output())
             self.notifications_layout.addWidget(label)
