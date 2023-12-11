@@ -31,7 +31,7 @@ CREATE TABLE notifications (
 CREATE TABLE workers_notifications (
     worker_id TEXT,
     notification_id INTEGER,
-    is_seen DATETIME,
+    seen DATETIME,
     PRIMARY KEY (worker_id, notification_id),
     FOREIGN KEY (worker_id) REFERENCES workers(worker_id),
     FOREIGN KEY (notification_id) REFERENCES notifications(notification_id)

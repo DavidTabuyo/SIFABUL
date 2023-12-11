@@ -11,39 +11,42 @@ class WorkerController(UserController):
         self.worker_id = worker_id
 
     def get_notifications(self) -> list[NotificationWorker]:
-        #cuando llamemos a este metodo significa que el becario ya ha visto todas las notificaciones
+        # cuando llamemos a este metodo significa que el becario ya ha visto todas las notificaciones
         return WorkerDao.get_notifications(self.worker_id)
 
     def get_today_checks(self) -> list[Check]:
-        return WorkerDao.get_today_checks(self.worker_id,self.get_date())
-                     
+        return WorkerDao.get_today_checks(self.worker_id, self.get_date())
+
     # def get_semanas(self, n: int) -> list[Week]:
     #     return super().get_semanas(self.user.user_id, n)
 
     def check(self) -> Check:
-        new_check=Check(self.worker_id,self.get_date(),self.get_time(),self.get_next_check_status())
-        if new_check.get_minutes()==WorkerDao.get_last_check(self.worker_id,self.get_date()).get_minutes():
+        new_check = Check(self.worker_id, self.get_date(),
+                          self.get_time(), self.get_next_check_status())
+        if new_check.get_minutes() == WorkerDao.get_today_checks(self.worker_id, self.get_date())[-1].get_minutes():
             raise LookupError('Ya has fichado')
-        WorkerDao.add_new_check(self.worker_id,new_check)
-        return new_check            
-    
+        WorkerDao.add_new_check(self.worker_id, new_check)
+        return new_check
+
     # def get_resumen(self):
     #     ...
-    
+
+    def get_last_check(self):
+        return WorkerDao.get_today_checks(self.worker_id, self.get_date())[-1]
+
     def get_date(self):
         # Obtener fecha actual real
-        timestamp = arrow.get(requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
+        timestamp = arrow.get(requests.get(
+            'http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
         return timestamp.format('YYYY/MM/DD')
-    
-    def get_time(self):
-        timestamp = arrow.get(requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
-        return timestamp.format('HH:mm:ss')    
 
-    def get_next_check_status(self)->int:
-        return  WorkerDao.get_last_check(self.worker_id,self.get_date()).get_next_status()
-    
-    
-    
+    def get_time(self):
+        timestamp = arrow.get(requests.get(
+            'http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
+        return timestamp.format('HH:mm:ss')
+
+    def get_next_check_status(self) -> int:
+        return WorkerDao.get_last_check(self.worker_id, self.get_date()).get_next_status()
 
 
 # class __ControladorBecario(__Controlador):
