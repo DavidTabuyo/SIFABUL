@@ -2,6 +2,9 @@ import arrow
 import requests
 from controller.user_controller import UserController
 from model.check import Check
+from model.dao.check_dao import Checkdao
+from model.dao.notification_worker_dao import NotificationWorkerdao
+from model.dao.week_dao import Weekdao
 from model.dao.worker_dao import WorkerDao
 from model.notification_worker import NotificationWorker
 
@@ -12,9 +15,11 @@ class WorkerController(UserController):
 
     def get_notifications(self) -> list[NotificationWorker]:
         # cuando llamemos a este metodo significa que el becario ya ha visto todas las notificaciones
-        notifications = WorkerDao.get_notifications(self.worker_id)
-        for notification in notifications:
-            WorkerDao.update_notifications_status(self.worker_id, notification.notification_id)
+        notifications = ...
+        return WorkerDao.get_notifications(self.worker_id)
+        
+        # for notification in notifications:
+        #     NotificationWorkerdao.update_notifications_status(self.worker_id, notification.notification_id,_,_)
 
     def get_today_checks(self) -> list[Check]:
         return WorkerDao.get_today_checks(self.worker_id, self.get_current_time()[1])
@@ -33,21 +38,21 @@ class WorkerController(UserController):
 
         # Añadir nuevo fichaje
         is_new_check_entry = not last_check.is_entry if last_check else True
-        WorkerDao.add_new_check(self.worker_id, date, time, is_new_check_entry)
+        Checkdao.add_new_check(self.worker_id, date, time, is_new_check_entry)
 
         # Salir de la funcion si es fichaje de salida
         if is_new_check_entry:
             return
 
         # Calculo de tiempo fichado y actualizar semana
-        week = WorkerDao.get_week(self.worker_id, monday)
+        week = Weekdao.get_week(self.worker_id, monday)
         week_total = week.total if week else 0
 
         entry = arrow.get(last_check.time, 'HH:mm:ss')
         exit = arrow.get(time, 'HH:mm:ss')
         total_seconds_check_in = (exit - entry).total_seconds()
 
-        WorkerDao.update_or_create_week(
+        Weekdao.update_or_create_week(
             self.worker_id, monday, week_total + total_seconds_check_in)
 
     # def get_resumen(self):

@@ -55,43 +55,4 @@ class WorkerDao:
         connection.close()
         return Check(*last_check) if last_check else None
 
-    @staticmethod
-    def get_week(worker_id: str, monday: str) -> Week:
-        connection = sqlite3.connect('db/db.sqlite')
-        week = connection.execute('''
-            SELECT worker_id, monday, total
-            FROM weeks
-            WHERE worker_id = ? and monday = ?
-        ''', (worker_id, monday)).fetchone()
-        connection.close()
-        return Week(*week) if week else None
 
-    @staticmethod
-    def add_new_check(worker_id: str, date: str, time: str, is_entry: bool):
-        connection = sqlite3.connect('db/db.sqlite')
-        connection.execute('''
-            INSERT INTO checks (worker_id, date, time, is_entry) VALUES
-                (?, ?, ?, ?);
-        ''', (worker_id, date, time, is_entry))
-        connection.commit()
-        connection.close()
-
-    @staticmethod
-    def update_or_create_week(worker_id: str, monday: str, total: int):
-        connection = sqlite3.connect('db/db.sqlite')
-        connection.execute('''
-            INSERT OR REPLACE INTO weeks (worker_id, monday, total) VALUES
-                (?, ?, ?);
-        ''', (worker_id, monday, total))
-        connection.commit()
-        connection.close()
-
-    @staticmethod
-    def update_notifications_status(worker_id: str, no):
-        connection = sqlite3.connect('db/db.sqlite')
-        connection.execute('''
-            INSERT OR REPLACE INTO weeks (worker_id, monday, total) VALUES
-                (?, ?, ?);
-        ''', (worker_id, monday, total))
-        connection.commit()
-        connection.close()

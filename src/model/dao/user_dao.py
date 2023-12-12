@@ -1,5 +1,4 @@
 import sqlite3
-from model.week import Week
 from model.user import User
 
 
@@ -37,6 +36,3 @@ class UserDao:
         connection.close()
         return User(*user) if user else None
         
-    @staticmethod
-    def get_weeks(worker_id: str) -> list[Week]:
-        ...

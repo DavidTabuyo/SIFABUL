@@ -50,7 +50,7 @@ class WorkerView(QMainWindow):
 
     def btnChangePassword_clicked(self):
         # bbecario quiere cambiar su contraseña
-        self.nueva_ventana = ChangePasswordView()
+        self.nueva_ventana = ChangePasswordView(self.worker)
         self.nueva_ventana.show()
 
     def update_fichajes(self):

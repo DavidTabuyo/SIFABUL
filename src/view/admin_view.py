@@ -70,7 +70,7 @@ class AdminView(QMainWindow):
         self.nueva_ventana.show()
         
     def change_password_btn_clicked(self):
-        self.nueva_ventana= ChangePasswordView()
+        self.nueva_ventana= ChangePasswordView(self.admin)
         self.nueva_ventana.show()
     
     def update_btn_clicked(self):
