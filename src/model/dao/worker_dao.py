@@ -85,3 +85,13 @@ class WorkerDao:
         ''', (worker_id, monday, total))
         connection.commit()
         connection.close()
+
+    @staticmethod
+    def update_notifications_status(worker_id: str, no):
+        connection = sqlite3.connect('db/db.sqlite')
+        connection.execute('''
+            INSERT OR REPLACE INTO weeks (worker_id, monday, total) VALUES
+                (?, ?, ?);
+        ''', (worker_id, monday, total))
+        connection.commit()
+        connection.close()
