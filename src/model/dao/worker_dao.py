@@ -1,6 +1,5 @@
 import sqlite3
 from model.check import Check
-from model.notification import Notification
 from model.notification_worker import NotificationWorker
 from model.week import Week
 from model.worker import Worker
@@ -23,7 +22,7 @@ class WorkerDao:
     def get_notifications(worker_id: str) -> list[NotificationWorker]:
         connection = sqlite3.connect('db/db.sqlite')
         notifications = connection.execute('''
-            SELECT notifications.title, notifications.description, notifications.datetime, workers_notifications.seen
+            SELECT notifications.notification_id, notifications.title, notifications.description, notifications.datetime, workers_notifications.seen
             FROM notifications
             JOIN workers_notifications on notifications.notification_id = workers_notifications.notification_id
             WHERE workers_notifications.worker_id = ?
@@ -39,7 +38,7 @@ class WorkerDao:
             SELECT worker_id, date, time, is_entry
             FROM checks
             WHERE worker_id = ? and date = ?
-            ORDER BY time 
+            ORDER BY time
         ''', (worker_id, date)).fetchall()
         connection.close()
         return [Check(*check) for check in today_checks]
@@ -78,7 +77,7 @@ class WorkerDao:
         connection.close()
 
     @staticmethod
-    def udpate_or_create_week(worker_id: str, monday: str, total: int):
+    def update_or_create_week(worker_id: str, monday: str, total: int):
         connection = sqlite3.connect('db/db.sqlite')
         connection.execute('''
             INSERT OR REPLACE INTO weeks (worker_id, monday, total) VALUES

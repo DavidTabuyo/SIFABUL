@@ -12,7 +12,9 @@ class WorkerController(UserController):
 
     def get_notifications(self) -> list[NotificationWorker]:
         # cuando llamemos a este metodo significa que el becario ya ha visto todas las notificaciones
-        return WorkerDao.get_notifications(self.worker_id)
+        notifications = WorkerDao.get_notifications(self.worker_id)
+        for notification in notifications:
+            WorkerDao.update_notifications_status(self.worker_id, notification.notification_id)
 
     def get_today_checks(self) -> list[Check]:
         return WorkerDao.get_today_checks(self.worker_id, self.get_current_time()[1])
@@ -38,12 +40,12 @@ class WorkerController(UserController):
             return
 
         # Calculo de tiempo fichado y actualizar semana
-        week = WorkerDao.get_week(monday)
+        week = WorkerDao.get_week(self.worker_id, monday)
         week_total = week.total if week else 0
 
         entry = arrow.get(last_check.time, 'HH:mm:ss')
         exit = arrow.get(time, 'HH:mm:ss')
-        total_seconds_check_in = (entry - exit).total_seconds()
+        total_seconds_check_in = (exit - entry).total_seconds()
 
         WorkerDao.update_or_create_week(
             self.worker_id, monday, week_total + total_seconds_check_in)
