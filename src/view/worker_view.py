@@ -23,7 +23,7 @@ class WorkerView(QMainWindow):
         self.update_fichajes()
 
         # llamamos a get notificaciones y obtenemos lista de notificaciones
-        #self.update_notifications()
+        self.update_notifications()
 
     def BtnFichar_clicked(self):
         # el becario ficha entrada o salida
@@ -76,7 +76,7 @@ class WorkerView(QMainWindow):
             self.notifications_layout.addWidget(label)
             label.setAlignment(Qt.AlignCenter)
             label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            if i.is_seen:
+            if i.seen:
                 label.setStyleSheet(
                     'background-color: green;font-size: 20px;border-radius: 10px;')
             else:

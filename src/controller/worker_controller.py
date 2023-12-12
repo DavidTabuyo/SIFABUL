@@ -15,16 +15,15 @@ class WorkerController(UserController):
         return WorkerDao.get_notifications(self.worker_id)
 
     def get_today_checks(self) -> list[Check]:
-        return WorkerDao.get_today_checks(self.worker_id, self.get_datetime(0))
+        return WorkerDao.get_today_checks(self.worker_id, self.get_current_time()[1])
 
     # def get_semanas(self, n: int) -> list[Week]:
     #     return super().get_semanas(self.user.user_id, n)
 
     def check(self):
-        date=self.get_datetime(0)
-        time=self.get_datetime(1)
-        monday=self.get_datetime(2)
-        
+        # Obtener fecha actual real
+        monday, date, time = self.get_current_time()
+
         # Obtener el ultimo fichaje del dia
         last_check = WorkerDao.get_last_today_check(self.worker_id, date)
         if last_check and time[3:5] == last_check.time[3:5]:
@@ -34,7 +33,7 @@ class WorkerController(UserController):
         is_new_check_entry = not last_check.is_entry if last_check else True
         WorkerDao.add_new_check(self.worker_id, date, time, is_new_check_entry)
 
-        # Salir de la funcion si es fichaje de entrada
+        # Salir de la funcion si es fichaje de salida
         if is_new_check_entry:
             return
 
@@ -45,30 +44,19 @@ class WorkerController(UserController):
         entry = arrow.get(last_check.time, 'HH:mm:ss')
         exit = arrow.get(time, 'HH:mm:ss')
         total_seconds_check_in = (entry - exit).total_seconds()
-        
-        WorkerDao.update_or_create_week(self.worker_id, monday, week_total + total_seconds_check_in)
-        
+
+        WorkerDao.update_or_create_week(
+            self.worker_id, monday, week_total + total_seconds_check_in)
+
     # def get_resumen(self):
     #     ...
 
-    def get_next_check_status(self) -> int:
-        return WorkerDao.get_last_check(self.worker_id, self.get_date()).get_next_status()
-
-
-    def get_datetime(self,type:int)->str:
+    def get_current_time(self) -> tuple[str, str, str]:
         timestamp = arrow.get(requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
-        if type==0:
-            #return date
-            return timestamp.format('YYYY/MM/DD')
-        elif type==1:
-            #return time
-            return timestamp.format('HH:mm:ss')
-        else:
-            #return monday
-            return timestamp.floor('week').format('YYYY-MM-DD')
-
-
-
+        monday = timestamp.floor('week').format('YYYY-MM-DD')
+        date = timestamp.format('YYYY/MM/DD')
+        time = timestamp.format('HH:mm:ss')
+        return (monday, date, time)
 
 
 # class __ControladorBecario(__Controlador):

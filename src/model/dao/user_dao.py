@@ -6,19 +6,32 @@ from model.user import User
 class UserDao:
     @staticmethod
     def is_worker(user_id: str) -> bool:
-        return True
+        connection = sqlite3.connect('db/db.sqlite')
+        worker = connection.execute('''
+            SELECT worker_id
+            FROM workers
+            WHERE worker_id = ?
+        ''', (user_id,)).fetchone()
+        connection.close()
+        return worker != None
 
     @staticmethod
     def is_admin(user_id: str) -> bool:
-        ...
+        connection = sqlite3.connect('db/db.sqlite')
+        admin = connection.execute('''
+            SELECT admin_id
+            FROM admins
+            WHERE admin_id = ?
+        ''', (user_id,)).fetchone()
+        connection.close()
+        return admin != None
         
     @staticmethod
     def get_user(user_id: str) -> User:
         connection = sqlite3.connect('db/db.sqlite')
         user = connection.execute('''
-            SELECT users.user_id, users.name, users.salt, users.hash
+            SELECT user_id, name, salt, hash
             FROM users
-            JOIN workers on users.user_id = workers.worker_id
             WHERE user_id = ?
         ''', (user_id,)).fetchone()
         connection.close()

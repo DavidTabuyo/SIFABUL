@@ -28,7 +28,7 @@ class WorkerDao:
             JOIN workers_notifications on notifications.notification_id = workers_notifications.notification_id
             WHERE workers_notifications.worker_id = ?
             ORDER BY notifications.datetime DESC
-        ''', (worker_id,)).fetchone()
+        ''', (worker_id,)).fetchall()
         connection.close()
         return [NotificationWorker(*notification) for notification in notifications]
 
@@ -57,15 +57,32 @@ class WorkerDao:
         return Check(*last_check) if last_check else None
 
     @staticmethod
-    def add_new_check(worker_ID: str, date:str,time:str,is_new_check:bool):
-        ...
+    def get_week(worker_id: str, monday: str) -> Week:
+        connection = sqlite3.connect('db/db.sqlite')
+        week = connection.execute('''
+            SELECT worker_id, monday, total
+            FROM weeks
+            WHERE worker_id = ? and monday = ?
+        ''', (worker_id, monday)).fetchone()
+        connection.close()
+        return Week(*week) if week else None
 
     @staticmethod
-    def get_week(monday:str)-> Week:
-        ...
-        
+    def add_new_check(worker_id: str, date: str, time: str, is_entry: bool):
+        connection = sqlite3.connect('db/db.sqlite')
+        connection.execute('''
+            INSERT INTO checks (worker_id, date, time, is_entry) VALUES
+                (?, ?, ?, ?);
+        ''', (worker_id, date, time, is_entry))
+        connection.commit()
+        connection.close()
+
     @staticmethod
-    def udpate_or_create_week(worker_ID:str,monday:str,week_total:float):
-        ...
-        
-        
+    def udpate_or_create_week(worker_id: str, monday: str, total: int):
+        connection = sqlite3.connect('db/db.sqlite')
+        connection.execute('''
+            INSERT OR REPLACE INTO weeks (worker_id, monday, total) VALUES
+                (?, ?, ?);
+        ''', (worker_id, monday, total))
+        connection.commit()
+        connection.close()
