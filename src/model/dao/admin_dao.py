@@ -14,7 +14,7 @@ class AdminDao:
             WHERE user_id = ?
         ''', (admin_id,)).fetchone()
         connection.close()
-        return Admin(*admin)
+        return Admin(*admin) if admin else None
     
     @staticmethod
     def get_notifications(admin_id: str) -> list[Notification]:

@@ -16,7 +16,7 @@ class WorkerDao:
             WHERE user_id = ?
         ''', (worker_id,)).fetchone()
         connection.close()
-        return Worker(*worker)
+        return Worker(*worker) if worker else None
 
     @staticmethod
     def get_notifications(worker_id: str) -> list[NotificationWorker]:
@@ -38,10 +38,22 @@ class WorkerDao:
             SELECT worker_id, date, time, is_entry
             FROM checks
             WHERE worker_id = ? and date = ?
-            ORDER BY time DESC
+            ORDER BY time 
         ''', (worker_id, date)).fetchall()
         connection.close()
         return [Check(*check) for check in today_checks]
+
+    @staticmethod
+    def get_last_today_check(worker_id: str, date: str) -> Check:
+        connection = sqlite3.connect('db/db.sqlite')
+        last_check = connection.execute('''
+            SELECT worker_id, date, time, is_entry
+            FROM checks
+            WHERE worker_id = ? and date = ?
+            ORDER BY time DESC
+        ''', (worker_id, date)).fetchone()
+        connection.close()
+        return Check(*last_check) if last_check else None
 
     @staticmethod
     def add_new_check(worker_ID: str, check: Check):

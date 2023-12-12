@@ -20,30 +20,38 @@ class WorkerController(UserController):
     # def get_semanas(self, n: int) -> list[Week]:
     #     return super().get_semanas(self.user.user_id, n)
 
-    def check(self) -> Check:
-        new_check = Check(self.worker_id, self.get_date(),
-                          self.get_time(), self.get_next_check_status())
-        if new_check.get_minutes() == WorkerDao.get_today_checks(self.worker_id, self.get_date())[-1].get_minutes():
+    def check(self):
+        # Obtener fecha actual real
+        timestamp = arrow.get(requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
+        time = timestamp.format('HH:mm:ss')
+        date = timestamp.format('YYYY-MM-DD')
+        monday = timestamp.floor('week').format('YYYY-MM-DD')
+        
+        # Obtener el ultimo fichaje del dia
+        last_check = WorkerDao.get_last_today_check(self.worker_id, date)
+        if last_check and time[3:5] == last_check.time[3:5]:
             raise LookupError('Ya has fichado')
-        WorkerDao.add_new_check(self.worker_id, new_check)
-        return new_check
 
+        # Añadir nuevo fichaje
+        is_new_check_entry = not last_check.is_entry if last_check else True
+        WorkerDao.add_new_check(self.worker_id, date, time, is_new_check_entry)
+
+        # Salir de la funcion si es fichaje de entrada
+        if is_new_check_entry:
+            return
+
+        # Calculo de tiempo fichado y actualizar semana
+        week = WorkerDao.get_week(monday)
+        week_total = week.total if week else 0
+
+        entry = arrow.get(last_check.time, 'HH:mm:ss')
+        exit = arrow.get(time, 'HH:mm:ss')
+        total_seconds_check_in = (entry - exit).total_seconds()
+        
+        WorkerDao.update_or_create_week(self.worker_id, monday, week_total + total_seconds_check_in)
+        
     # def get_resumen(self):
     #     ...
-
-    def get_last_check(self):
-        return WorkerDao.get_today_checks(self.worker_id, self.get_date())[-1]
-
-    def get_date(self):
-        # Obtener fecha actual real
-        timestamp = arrow.get(requests.get(
-            'http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
-        return timestamp.format('YYYY/MM/DD')
-
-    def get_time(self):
-        timestamp = arrow.get(requests.get(
-            'http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
-        return timestamp.format('HH:mm:ss')
 
     def get_next_check_status(self) -> int:
         return WorkerDao.get_last_check(self.worker_id, self.get_date()).get_next_status()

@@ -48,7 +48,7 @@ CREATE TABLE checks (
     FOREIGN KEY (worker_id) REFERENCES workers(worker_id)
 );
 
-CREATE TABLE semanas (
+CREATE TABLE weeks (
     worker_id TEXT,
     monday DATE,
     total INTEGER NOT NULL,
