@@ -22,7 +22,7 @@ INSERT INTO workers_notifications (notification_id, worker_id) VALUES
 
 
 INSERT INTO checks (worker_id, date, time, is_entry) VALUES
-    ('dtabum00', '2023/12/06', '12:29:34', 1),
-    ('dtabum00', '2023/12/06', '12:34:56', 0),
+    ('dtabum00', '2023/12/12', '9:29:34', 1),
+    ('dtabum00', '2023/12/12', '9:34:56', 0),
     ('vtunog00', '2023-11-26', '12:35:01', 1),
     ('vtunog00', '2023-11-26', '12:33:45', 1);

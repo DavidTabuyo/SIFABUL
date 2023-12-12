@@ -15,17 +15,15 @@ class WorkerController(UserController):
         return WorkerDao.get_notifications(self.worker_id)
 
     def get_today_checks(self) -> list[Check]:
-        return WorkerDao.get_today_checks(self.worker_id, self.get_date())
+        return WorkerDao.get_today_checks(self.worker_id, self.get_datetime(0))
 
     # def get_semanas(self, n: int) -> list[Week]:
     #     return super().get_semanas(self.user.user_id, n)
 
     def check(self):
-        # Obtener fecha actual real
-        timestamp = arrow.get(requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
-        time = timestamp.format('HH:mm:ss')
-        date = timestamp.format('YYYY-MM-DD')
-        monday = timestamp.floor('week').format('YYYY-MM-DD')
+        date=self.get_datetime(0)
+        time=self.get_datetime(1)
+        monday=self.get_datetime(2)
         
         # Obtener el ultimo fichaje del dia
         last_check = WorkerDao.get_last_today_check(self.worker_id, date)
@@ -55,6 +53,22 @@ class WorkerController(UserController):
 
     def get_next_check_status(self) -> int:
         return WorkerDao.get_last_check(self.worker_id, self.get_date()).get_next_status()
+
+
+    def get_datetime(self,type:int)->str:
+        timestamp = arrow.get(requests.get('http://worldtimeapi.org/api/timezone/Europe/Madrid').json()['datetime'])
+        if type==0:
+            #return date
+            return timestamp.format('YYYY/MM/DD')
+        elif type==1:
+            #return time
+            return timestamp.format('HH:mm:ss')
+        else:
+            #return monday
+            return timestamp.floor('week').format('YYYY-MM-DD')
+
+
+
 
 
 # class __ControladorBecario(__Controlador):

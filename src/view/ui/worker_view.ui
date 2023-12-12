@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>BECARIO</class>
+ <widget class="QMainWindow" name="BECARIO">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -25,36 +25,7 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <layout class="QVBoxLayout" name="layoutFichajes">
-       <item>
-        <widget class="QPushButton" name="btnResumen">
-         <property name="text">
-          <string>VER RESUMEN</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label1">
-         <property name="font">
-          <font>
-           <family>Magneto</family>
-           <pointsize>11</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>FICHAJES</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::PlainText</enum>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <layout class="QVBoxLayout" name="layoutFichajes"/>
      </item>
      <item>
       <widget class="QPushButton" name="BtnFichar">
@@ -81,13 +52,39 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>60</y>
+      <x>560</x>
+      <y>70</y>
       <width>160</width>
       <height>471</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="notifications_layout"/>
+   </widget>
+   <widget class="QPushButton" name="btnResumen">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>20</y>
+      <width>247</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>VER RESUMEN</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="refresh_btn">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>40</y>
+      <width>131</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Recargar</string>
+    </property>
    </widget>
   </widget>
  </widget>

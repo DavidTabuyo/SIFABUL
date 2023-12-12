@@ -1,5 +1,5 @@
 from controller.login_controller import login
 
 
-# controlador = login('dtabum00', 'hola')
-mi_lista = [][-1]
+controlador = login('dtabum00', 'hola')
+print(controlador.get_notifications())

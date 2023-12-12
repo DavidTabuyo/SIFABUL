@@ -16,28 +16,21 @@ class WorkerView(QMainWindow):
         self.BtnFichar.clicked.connect(self.BtnFichar_clicked)
         self.btnResumen.clicked.connect(self.btnResumen_clicked)
         self.btnChangePassword.clicked.connect(self.btnChangePassword_clicked)
+        self.refresh_btn.clicked.connect(self.refresh_btn_clicked)
+
 
         # actualizamos la lista de fichajes
         self.update_fichajes()
 
         # llamamos a get notificaciones y obtenemos lista de notificaciones
-        self.update_notifications()
+        #self.update_notifications()
 
     def BtnFichar_clicked(self):
         # el becario ficha entrada o salida
         try:
             check = self.worker.check()
-            label = QLabel(check.get_output())
-            self.layoutFichajes.addWidget(label)
-            label.setAlignment(Qt.AlignCenter)
-            label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            if check.is_entry:
-                label.setStyleSheet(
-                    'background-color: green;font-size: 20px;border-radius: 10px;')
-            else:
-                label.setStyleSheet(
-                    'background-color: red;font-size: 20px;border-radius: 10px;')
-
+            self.clear_layout(self.layoutFichajes)
+            self.update_fichajes()
         except LookupError as e:
             # pulsamos el boton dos veces seguidas(mismo minuto)
             error_message = QMessageBox()
@@ -46,6 +39,9 @@ class WorkerView(QMainWindow):
             error_message.setText(str(e))
             error_message.setStandardButtons(QMessageBox.Ok)
             error_message.exec_()
+            
+    def refresh_btn_clicked(self):
+        self.update_notifications()
 
     def btnResumen_clicked(self):
         # el becario quiere ver su resumen
@@ -58,6 +54,7 @@ class WorkerView(QMainWindow):
         self.nueva_ventana.show()
 
     def update_fichajes(self):
+        self.clear_layout(self.layoutFichajes)
         fichajes = self.worker.get_today_checks()
         for object in fichajes:
             label = QLabel(object.get_output())
@@ -72,6 +69,7 @@ class WorkerView(QMainWindow):
                     'background-color: red;font-size: 20px;border-radius: 10px;')
 
     def update_notifications(self):
+        self.clear_layout(self.notifications_layout)
         notList = self.worker.get_notifications()
         for i in notList:
             label = QLabel(i.get_output())
@@ -84,3 +82,26 @@ class WorkerView(QMainWindow):
             else:
                 label.setStyleSheet(
                     'background-color: red;font-size: 20px;border-radius: 10px;')
+    
+    def clear_layout(self, layout):
+        # Borrar todos los widgets en el layout
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
+        if layout==self.layoutFichajes:    
+            check_label = QLabel('Fichajes', self)
+            check_label.setAlignment(Qt.AlignCenter)
+            check_label.setStyleSheet(
+                "QLabel {"
+                "   font-family: Decorative;"
+                "   font-size: 20px;"
+                "   color: black;"
+                "   background-color: #FFB6C1;" 
+                "}"
+            )     
+            layout.addWidget(check_label)
+   
+                
+    

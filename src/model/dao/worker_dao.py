@@ -2,6 +2,7 @@ import sqlite3
 from model.check import Check
 from model.notification import Notification
 from model.notification_worker import NotificationWorker
+from model.week import Week
 from model.worker import Worker
 
 
@@ -24,8 +25,8 @@ class WorkerDao:
         notifications = connection.execute('''
             SELECT notifications.title, notifications.description, notifications.datetime, workers_notifications.seen
             FROM notifications
-            JOIN workers_notifications on notifications.notifications_id = workers_notifications.notification_id
-            WHERE notifications_workers.worker_id = ?
+            JOIN workers_notifications on notifications.notification_id = workers_notifications.notification_id
+            WHERE workers_notifications.worker_id = ?
             ORDER BY notifications.datetime DESC
         ''', (worker_id,)).fetchone()
         connection.close()
@@ -56,5 +57,15 @@ class WorkerDao:
         return Check(*last_check) if last_check else None
 
     @staticmethod
-    def add_new_check(worker_ID: str, check: Check):
+    def add_new_check(worker_ID: str, date:str,time:str,is_new_check:bool):
         ...
+
+    @staticmethod
+    def get_week(monday:str)-> Week:
+        ...
+        
+    @staticmethod
+    def udpate_or_create_week(worker_ID:str,monday:str,week_total:float):
+        ...
+        
+        
